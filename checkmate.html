@@ -7,9 +7,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0/chess.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/js/chessboard.min.js"></script>
 <style>
-body { background:#161512; color:white; text-align:center; font-family:sans-serif; }
+body { background:#161512; color:white; font-family:sans-serif; text-align:center; }
 #board { width: 320px; margin:auto; margin-top:20px; }
-button { padding:10px 20px; margin-top:10px; border:none; border-radius:6px; background:#dbac16; color:black; font-weight:bold; cursor:pointer; }
+button { padding:10px 20px; margin-top:10px; border:none; border-radius:6px; background:#dbac16; color:black; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -18,48 +18,22 @@ button { padding:10px 20px; margin-top:10px; border:none; border-radius:6px; bac
 <button onclick="loadPuzzle()">Nouveau Puzzle</button>
 
 <script>
-// Puzzle Lichess
-const puzzleJSON = {
-  "puzzle": {
-    "solution":["c6d4","f3g3","d4e2","g1h2","e2g3"]
-  },
-  "game": {
-    "pgn":"e4 e5 Nf3 Nc6 Bc4 Nf6 Nc3 Bc5 O-O d6 h3 h6 d3 g5 Nxg5 hxg5 Bxg5 Rg8 Bxf6 Qxf6 Nd5 Qg6 Qf3 f5 Nxc7+ Kd8 Nxa8 fxe4 dxe4"
-  }
-};
-
 let board = null;
 let game = new Chess();
-let moveIndex = 0;
 
-// Charger PGN
 function loadPuzzle(){
-    game.load_pgn(puzzleJSON.game.pgn);
+    // Exemple FEN d'une position simple
+    game.load('r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4');
     board.position(game.fen());
-    moveIndex = 0;
 }
 
-// Vérifier le coup du joueur
 function onDrop(source, target){
     let move = game.move({from:source, to:target, promotion:'q'});
     if(move===null) return 'snapback';
-    let userMove = move.from+move.to;
-
-    if(userMove === puzzleJSON.puzzle.solution[moveIndex]){
-        moveIndex++;
-        if(moveIndex >= puzzleJSON.puzzle.solution.length){
-            alert("✅ Mate réussi !");
-            loadPuzzle(); // charger nouveau puzzle
-        }
-    } else {
-        game.undo();
-        return 'snapback';
-    }
 }
 
-// Initialisation échiquier
 board = Chessboard('board', {draggable:true, position:'start', onDrop:onDrop});
 loadPuzzle();
 </script>
 </body>
-</html>
+</html>￼Enter
