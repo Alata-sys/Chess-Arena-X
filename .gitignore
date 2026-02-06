@@ -1,0 +1,8 @@
+# Fichiers de secrets
+.env
+config.js
+
+# Stockage local et logs
+.DS_Store
+node_modules/
+*.log
