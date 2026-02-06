@@ -6,108 +6,97 @@
 <title>Chess Battle Run</title>
 <link rel="manifest" href="manifest.json">
 <style>
-    :root {
-        --bg: #161512;
-        --accent: #dbac16;
-        --success: #629924;
-        --primary-color: #dbac16;
-        --secondary-color: #629924;
-    }
+:root {
+    --bg: #161512;
+    --accent: #dbac16;
+    --secondary: #629924;
+}
 
-    body {
-        background: var(--bg);
-        color: white;
-        font-family: sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        height: 100vh;
-        margin: 0;
-        padding: 20px;
-        overflow-x: hidden;
-    }
+body {
+    background: var(--bg);
+    color: white;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+}
 
-    h1 {
-        font-size: 2em;
-        margin-bottom: 30px;
-        animation: rainbow-text 5s linear infinite;
-    }
+h1 {
+    font-size: 2em;
+    margin-bottom: 30px;
+    animation: rainbow-text 5s linear infinite;
+}
 
-    @keyframes rainbow-text {
-        0% { color: #dbac16; }
-        20% { color: #629924; }
-        40% { color: #ff4444; }
-        60% { color: #00bfff; }
-        80% { color: #db16ac; }
-        100% { color: #dbac16; }
-    }
+@keyframes rainbow-text {
+    0% { color: #dbac16; }
+    20% { color: #629924; }
+    40% { color: #ff4444; }
+    60% { color: #00bfff; }
+    80% { color: #db16ac; }
+    100% { color: #dbac16; }
+}
 
-    .status, .user-card, .menu {
-        background: #262421;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        width: 100%;
-        max-width: 450px;
-        text-align: center;
-    }
+.status, .error, .user-card, .menu {
+    background: #262421;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
 
-    .status {
-        font-weight: bold;
-        font-size: 1.1em;
-    }
+.status {
+    font-weight: bold;
+}
 
-    .error {
-        color: #ff4444;
-        background: rgba(255,0,0,0.1);
-        padding: 10px;
-        border-radius: 5px;
-        display: none;
-        margin-bottom: 20px;
-    }
+.error {
+    color: #ff4444;
+    background: rgba(255,0,0,0.1);
+    display: none;
+}
 
-    .chess-loader {
-        display: inline-block;
-        font-size: 2em;
-        animation: bounce 0.8s infinite alternate, colorchange 2s linear infinite;
-        margin-right: 10px;
-    }
+.chess-loader {
+    display: inline-block;
+    font-size: 2em;
+    animation: bounce 0.8s infinite alternate, colorchange 2s linear infinite;
+    margin-right: 10px;
+}
 
-    @keyframes bounce {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(-10px); }
-    }
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
 
-    @keyframes colorchange {
-        0% { color: #dbac16; }
-        25% { color: #629924; }
-        50% { color: #ff4444; }
-        75% { color: #00bfff; }
-        100% { color: #dbac16; }
-    }
+@keyframes colorchange {
+    0% { color: var(--accent); }
+    25% { color: var(--secondary); }
+    50% { color: #ff4444; }
+    75% { color: #00bfff; }
+    100% { color: var(--accent); }
+}
 
-    button {
-        background: var(--accent);
-        color: black;
-        border: none;
-        padding: 15px 30px;
-        margin: 10px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 1em;
-        animation: button-glow 3s ease-in-out infinite;
-    }
+button {
+    background: var(--accent);
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    margin: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1em;
+    animation: button-glow 3s ease-in-out infinite;
+}
 
-    @keyframes button-glow {
-        0%,100% { box-shadow: 0 0 5px var(--accent); }
-        50% { box-shadow: 0 0 20px var(--secondary-color); }
-    }
+@keyframes button-glow {
+    0%,100% { box-shadow: 0 0 5px var(--accent); }
+    50% { box-shadow: 0 0 20px var(--secondary); }
+}
 
-    button:hover {
-        transform: scale(1.05);
-    }
+button:hover { transform: scale(1.05); }
 </style>
 </head>
 <body>
@@ -129,11 +118,11 @@
 
 <div class="menu" id="game-menu" style="display:none;">
     <h2>Menu des Jeux</h2>
-    <button onclick="window.location.href='ghost.html'">Ghost Master</button>
-    <button onclick="window.location.href='detective.html'">Detective</button>
-    <button onclick="window.location.href='gladiator.html'">Gladiator</button>
-    <button onclick="window.location.href='chessforest.html'">Chess Forest</button>
-    <button onclick="window.location.href='fourplayers.html'">Échiquier 4 Joueurs</button>
+    <button onclick="alert('Ghost Master sera disponible bientôt !')">Ghost Master</button>
+    <button onclick="alert('Detective sera disponible bientôt !')">Detective</button>
+    <button onclick="alert('Gladiator sera disponible bientôt !')">Gladiator</button>
+    <button onclick="alert('Chess Forest sera disponible bientôt !')">Chess Forest</button>
+    <button onclick="alert('Échiquier 4 Joueurs sera disponible bientôt !')">Échiquier 4 Joueurs</button>
 </div>
 
 <script>
@@ -150,7 +139,6 @@ function showError(msg){
     statusEl.innerHTML = "Erreur système";
     errorEl.innerText = msg;
     errorEl.style.display = 'block';
-    // redirection automatique après 1.5s
     setTimeout(()=>{ menuEl.style.display='block'; }, 1500);
 }
 
@@ -162,7 +150,7 @@ async function startEngine(){
 
     if (!TOKEN || TOKEN.length<20){
         loaderEl.style.display='none';
-        TOKEN = prompt("🔑 CONFIGURATION CHESS BATTLE RUN\nColle ton Token Lichess ici :");
+        TOKEN = prompt("🔑 COLLE TON TOKEN LICHESS :");
         if (!TOKEN || TOKEN.trim().length<20){
             statusEl.innerHTML = "Jeton manquant... redirection menu.";
             setTimeout(()=>{ menuEl.style.display='block'; }, 500);
@@ -197,7 +185,6 @@ async function startEngine(){
         document.getElementById('username').innerText = data.username;
         userEl.style.display='block';
 
-        // Afficher le menu après 1s
         setTimeout(()=>{ menuEl.style.display='block'; }, 1000);
 
     } catch(error){
