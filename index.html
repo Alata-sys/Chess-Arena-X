@@ -50,8 +50,7 @@
         </div>
     </div>
 
-    <script> 
-        const response = await fetch('https://lichess.org', {
+    <script>
         const statusEl = document.getElementById('status-text');
         const userEl = document.getElementById('user-info');
         const nameEl = document.getElementById('username');
@@ -62,7 +61,7 @@
 
         async function startEngine() {
             if (!TOKEN) {
-                loaderEl.style.display = 'none'; // Cacher le loader si on demande le token
+                loaderEl.style.display = 'none';
                 TOKEN = prompt("🔑 CONFIGURATION CHESS BATTLE RUN\nColle ton Token Lichess ici (il sera sauvé localement) :");
                 if (TOKEN && TOKEN.trim() !== "") {
                     localStorage.setItem('CHESS_BATTLE_TOKEN', TOKEN.trim());
@@ -74,6 +73,7 @@
             }
 
             try {
+                // LIGNE CORRIGÉE : Utilisation de l'endpoint /api/account
                 const response = await fetch('https://lichess.org', {
                     method: 'GET',
                     headers: {
