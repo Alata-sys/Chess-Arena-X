@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Checkmate Challenge</title>
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/css/chessboard.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0/chess.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/js/chessboard.min.js"></script>
-
 <style>
 body { background:#161512; color:white; text-align:center; font-family:sans-serif; }
 #board { width: 320px; margin:auto; margin-top:20px; }
@@ -15,51 +13,43 @@ button { padding:10px 20px; margin-top:10px; border:none; border-radius:6px; bac
 </style>
 </head>
 <body>
-
 <h2>🔥 Checkmate Challenge</h2>
 <div id="board"></div>
-<button onclick="generatePuzzle()">Nouveau Puzzle</button>
+<button onclick="loadPuzzle()">Nouveau Puzzle</button>
 
-<script src="https://cdn.jsdelivr.net/gh/niklasf/stockfish.js/stockfish.js"></script>
 <script>
+// Puzzle Lichess
+const puzzleJSON = {
+  "puzzle": {
+    "solution":["c6d4","f3g3","d4e2","g1h2","e2g3"]
+  },
+  "game": {
+    "pgn":"e4 e5 Nf3 Nc6 Bc4 Nf6 Nc3 Bc5 O-O d6 h3 h6 d3 g5 Nxg5 hxg5 Bxg5 Rg8 Bxf6 Qxf6 Nd5 Qg6 Qf3 f5 Nxc7+ Kd8 Nxa8 fxe4 dxe4"
+  }
+};
+
 let board = null;
 let game = new Chess();
-let stockfish = Stockfish(); // moteur WebAssembly
-let solutionMoves = [];
 let moveIndex = 0;
 
-// Afficher échiquier
-board = Chessboard('board', {draggable:true, position:'start', onDrop:onDrop});
-
-// Liste de puzzles mate connus (FEN + solution)
-const puzzles = [
-    {fen:"8/8/8/8/8/6k1/5Q2/5K2 w - - 0 1", solution:["f2f6"]}, // Mate en 1
-    {fen:"8/8/8/5Q2/8/6k1/8/5K2 w - - 0 1", solution:["f5f6"]},  // Mate en 1
-    {fen:"8/8/5Q2/8/6k1/8/8/5K2 w - - 0 1", solution:["f6f7"]}, // Mate en 1
-    {fen:"6k1/5pp1/8/8/8/8/5Q2/5K2 w - - 0 1", solution:["f2f7"]}, // Mate en 1
-    {fen:"8/5k2/5pp1/8/8/8/5Q2/5K2 w - - 0 1", solution:["f2f7"]}, // Mate en 1
-];
-
-// Générer un puzzle aléatoire
-function generatePuzzle() {
-    moveIndex = 0;
-    const puzzle = puzzles[Math.floor(Math.random()*puzzles.length)];
-    game.load(puzzle.fen);
+// Charger PGN
+function loadPuzzle(){
+    game.load_pgn(puzzleJSON.game.pgn);
     board.position(game.fen());
-    solutionMoves = puzzle.solution;
+    moveIndex = 0;
 }
 
 // Vérifier le coup du joueur
-function onDrop(source, target) {
-    let move = game.move({from:source,to:target,promotion:'q'});
+function onDrop(source, target){
+    let move = game.move({from:source, to:target, promotion:'q'});
     if(move===null) return 'snapback';
     let userMove = move.from+move.to;
 
-    if(userMove===solutionMoves[moveIndex]){
+    if(userMove === puzzleJSON.puzzle.solution[moveIndex]){
         moveIndex++;
-        if(moveIndex>=solutionMoves.length){
+        if(moveIndex >= puzzleJSON.puzzle.solution.length){
             alert("✅ Mate réussi !");
-            generatePuzzle();
+            loadPuzzle(); // charger nouveau puzzle
         }
     } else {
         game.undo();
@@ -67,9 +57,9 @@ function onDrop(source, target) {
     }
 }
 
-// Initialiser premier puzzle
-generatePuzzle();
+// Initialisation échiquier
+board = Chessboard('board', {draggable:true, position:'start', onDrop:onDrop});
+loadPuzzle();
 </script>
-
 </body>
 </html>
