@@ -3,196 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Arena X</title>
+<title>Chess Battle Run</title>
 
 <style>
-
-/* ========== SCRIPT STYLE 1 : ROOT & BODY ========== */
-:root{
- --bg:#161512;
- --card:#262421;
- --accent:#dbac16;
- --green:#629924;
+:root {
+  --bg:#161512;
+  --accent:#dbac16;
+  --highlight:#ff4444;
+  --card:#262421;
 }
 
-body{
- margin:0;
- font-family:sans-serif;
- background:var(--bg);
- color:white;
- overflow-x:hidden;
+body {
+  margin:0;
+  font-family:sans-serif;
+  background:var(--bg);
+  color:white;
+  text-align:center;
 }
 
-/* ========== SCRIPT STYLE 2 : HEADER ========== */
-header{
- text-align:center;
- padding:20px;
- font-size:2em;
- font-weight:bold;
- animation:rainbow 6s linear infinite;
+h1 {
+  color:var(--accent);
+  margin:20px 0;
+  animation: glow 2s infinite alternate;
 }
 
-@keyframes rainbow{
- 0%{color:#dbac16}
- 25%{color:#629924}
- 50%{color:#ff4444}
- 75%{color:#00bfff}
- 100%{color:#dbac16}
+@keyframes glow {
+  0%{text-shadow:0 0 5px #dbac16;}
+  50%{text-shadow:0 0 20px #dbac16;}
+  100%{text-shadow:0 0 10px #dbac16;}
 }
 
-/* ========== SCRIPT STYLE 3 : GRID GAMES ========== */
-.games{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
- gap:15px;
- padding:15px;
+.game-card {
+  background:var(--card);
+  margin:20px auto;
+  padding:15px;
+  border-radius:10px;
+  max-width:400px;
+  border-top:5px solid var(--accent);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* ========== SCRIPT STYLE 4 : CARDS ========== */
-.card{
- background:var(--card);
- border-radius:12px;
- padding:20px;
- text-align:center;
- font-weight:bold;
- cursor:pointer;
- transition:0.2s;
- border-top:4px solid var(--accent);
+.game-card:hover {
+  transform: scale(1.05);
+  box-shadow:0 0 15px var(--accent);
 }
 
-.card:hover{
- transform:scale(1.05);
- box-shadow:0 0 20px var(--accent);
+button {
+  padding:10px 20px;
+  margin-top:10px;
+  border:none;
+  border-radius:6px;
+  background:var(--accent);
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+  transition: all 0.2s;
 }
 
-/* ========== SCRIPT STYLE 5 : FIRE ANIMATION ========== */
-.fire{
- animation:fire 1s infinite alternate;
+button:hover {
+  background:#ffba00;
 }
 
-@keyframes fire{
- from{filter:drop-shadow(0 0 5px red)}
- to{filter:drop-shadow(0 0 20px orange)}
+h3 {
+  margin:0;
+  font-size:1.3em;
 }
 
-/* ========== SCRIPT STYLE 6 : BADGE ========== */
-.badge{
- font-size:0.7em;
- background:red;
- padding:3px 6px;
- border-radius:6px;
- margin-left:5px;
+p {
+  font-size:0.9em;
+  opacity:0.8;
 }
 
-/* ========== SCRIPT STYLE 7 : FULLSCREEN BUTTON ========== */
-.full{
- grid-column:1/-1;
- background:#302e2c;
+/* Animation feu pour Checkmate Challenge */
+.checkmate-fire {
+  display:inline-block;
+  color:#ff3300;
+  font-weight:bold;
+  animation: fire 1s infinite alternate;
 }
 
-/* ========== SCRIPT STYLE 8 : FOOTER ========== */
-footer{
- text-align:center;
- padding:20px;
- opacity:0.6;
- font-size:0.8em;
+@keyframes fire {
+  0%{text-shadow:0 0 5px #ff3300;}
+  50%{text-shadow:0 0 20px #ff6600;}
+  100%{text-shadow:0 0 10px #ff3300;}
 }
-
 </style>
 </head>
 
 <body>
 
-<header>♟ CHESS Battle Run</header>
+<h1>CHESS BATTLE RUN 🎯</h1>
 
-<div class="games">
-
-<!-- SCRIPT CARD 1 -->
-<div class="card">
-🔥 Checkmate Challenge 
-<span class="badge fire">POPULAIRE</span>
-<br><small>Bientôt disponible</small>
+<!-- ✅ Checkmate Challenge -->
+<div class="game-card">
+  <h3><span class="checkmate-fire">🔥</span> Checkmate Challenge</h3>
+  <p>Testez vos mates en temps réel !</p>
+  <button onclick="window.location.href='checkmate.html'">Jouer</button>
 </div>
 
-<!-- SCRIPT CARD 2 -->
-<div class="card">
-👥 4 Joueurs On Board
-<br><small>Bientôt disponible</small>
+<!-- 👻 Ghost Master -->
+<div class="game-card">
+  <h3>👻 Ghost Master</h3>
+  <p>Bientôt disponible !</p>
+  <button onclick="window.location.href='ghostmaster.html'">Jouer</button>
 </div>
 
-<!-- SCRIPT CARD 3 -->
-<div class="card">
-🕵 Detective
-<br><small>Bientôt disponible</small>
+<!-- 🕵️ Detective -->
+<div class="game-card">
+  <h3>🕵️ Detective</h3>
+  <p>Bientôt disponible !</p>
+  <button onclick="window.location.href='detective.html'">Jouer</button>
 </div>
 
-<!-- SCRIPT CARD 4 -->
-<div class="card">
-👻 Ghost Master
-<br><small>Bientôt disponible</small>
+<!-- 🌲 Chess Forest -->
+<div class="game-card">
+  <h3>🌲 Chess Forest</h3>
+  <p>Échiquier gigantesque avec pièges !</p>
+  <button onclick="window.location.href='chessforest.html'">Jouer</button>
 </div>
 
-<!-- SCRIPT CARD 5 -->
-<div class="card">
-🌲 Chess Forest
-<br><small>Bientôt disponible</small>
+<!-- 4 Joueurs -->
+<div class="game-card">
+  <h3>🎲 4 Joueurs sur le même board</h3>
+  <p>Noir / Blanc / Bleu / Vert</p>
+  <button onclick="window.location.href='4players.html'">Jouer</button>
 </div>
 
-<!-- SCRIPT CARD 6 -->
-<div class="card">
-✨ Gladiator Royale
-<br><small>Bientôt disponible</small>
+<!-- Ajouter ici d'autres jeux si nécessaire -->
+<div class="game-card">
+  <h3>⚡ Prochains jeux</h3>
+  <p>Ghost Arena, Puzzle Racer avancé, etc…</p>
+  <button disabled>À venir</button>
 </div>
-
-<!-- SCRIPT CARD 7 -->
-<div class="card">
-🏆 Boss
-<br><small>Bientôt disponible</small>
-</div>
-
-<!-- SCRIPT CARD 8 -->
-<div class="card full">
-🚀 Plus de jeux arrivent...
-</div>
-
-</div>
-
-<footer>
-Chess Battle Run © 2026
-</footer>
-
-<!-- ========== SCRIPT JS 1 : CLICK EFFECT ========== -->
-<script>
-document.querySelectorAll('.card').forEach(c=>{
- c.onclick=()=>alert("Jeu bientôt disponible !");
-});
-</script>
-
-<!-- ========== SCRIPT JS 2 : PARTICLES COLOR ========== -->
-<script>
-setInterval(()=>{
- document.body.style.background=
- "linear-gradient(45deg,#161512,#1b1a17,#161512)";
-},3000);
-</script>
-
-<!-- ========== SCRIPT JS 3 : TITLE BLINK ========== -->
-<script>
-setInterval(()=>{
- document.title=document.title==="Chess Arena X"?
- "♟ Chess Battle Run":"Chess Battle Run";
-},1500);
-</script>
-
-<!-- ========== SCRIPT JS 4 : FIRE PULSE ========== -->
-<script>
-setInterval(()=>{
- document.querySelectorAll('.fire').forEach(f=>{
-  f.style.transform="scale(1.1)";
-  setTimeout(()=>f.style.transform="scale(1)",300);
- });
-},1000);
-</script>
 
 </body>
 </html>
