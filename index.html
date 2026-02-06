@@ -129,6 +129,20 @@ function resetConnection() {
 }
 
 window.onload = startEngine;
+    if (response.ok) {
+    const data = await response.json();
+    
+    // Succès
+    loaderEl.style.display = 'none';
+    statusEl.innerHTML = "Système Prêt ✔";
+    document.getElementById('username').innerText = data.username;
+    userEl.style.display = 'block';
+
+    // 🔹 Redirection automatique vers le menu des jeux après 1s
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 1000);
+    }
 </script>
 </body>
 </html>
