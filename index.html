@@ -3,208 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run</title>
-<link rel="manifest" href="manifest.json">
+<title>Chess Arena X</title>
+
 <style>
-:root {
-    --bg: #161512;
-    --accent: #dbac16;
-    --secondary: #629924;
+
+/* ========== SCRIPT STYLE 1 : ROOT & BODY ========== */
+:root{
+ --bg:#161512;
+ --card:#262421;
+ --accent:#dbac16;
+ --green:#629924;
 }
 
-body {
-    background: var(--bg);
-    color: white;
-    font-family: sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    min-height: 100vh;
+body{
+ margin:0;
+ font-family:sans-serif;
+ background:var(--bg);
+ color:white;
+ overflow-x:hidden;
 }
 
-h1 {
-    font-size: 2em;
-    margin-bottom: 30px;
-    animation: rainbow-text 5s linear infinite;
+/* ========== SCRIPT STYLE 2 : HEADER ========== */
+header{
+ text-align:center;
+ padding:20px;
+ font-size:2em;
+ font-weight:bold;
+ animation:rainbow 6s linear infinite;
 }
 
-@keyframes rainbow-text {
-    0% { color: #dbac16; }
-    20% { color: #629924; }
-    40% { color: #ff4444; }
-    60% { color: #00bfff; }
-    80% { color: #db16ac; }
-    100% { color: #dbac16; }
+@keyframes rainbow{
+ 0%{color:#dbac16}
+ 25%{color:#629924}
+ 50%{color:#ff4444}
+ 75%{color:#00bfff}
+ 100%{color:#dbac16}
 }
 
-.status, .error, .user-card, .menu {
-    background: #262421;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 450px;
-    text-align: center;
+/* ========== SCRIPT STYLE 3 : GRID GAMES ========== */
+.games{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+ gap:15px;
+ padding:15px;
 }
 
-.status {
-    font-weight: bold;
+/* ========== SCRIPT STYLE 4 : CARDS ========== */
+.card{
+ background:var(--card);
+ border-radius:12px;
+ padding:20px;
+ text-align:center;
+ font-weight:bold;
+ cursor:pointer;
+ transition:0.2s;
+ border-top:4px solid var(--accent);
 }
 
-.error {
-    color: #ff4444;
-    background: rgba(255,0,0,0.1);
-    display: none;
+.card:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 20px var(--accent);
 }
 
-.chess-loader {
-    display: inline-block;
-    font-size: 2em;
-    animation: bounce 0.8s infinite alternate, colorchange 2s linear infinite;
-    margin-right: 10px;
+/* ========== SCRIPT STYLE 5 : FIRE ANIMATION ========== */
+.fire{
+ animation:fire 1s infinite alternate;
 }
 
-@keyframes bounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-10px); }
+@keyframes fire{
+ from{filter:drop-shadow(0 0 5px red)}
+ to{filter:drop-shadow(0 0 20px orange)}
 }
 
-@keyframes colorchange {
-    0% { color: var(--accent); }
-    25% { color: var(--secondary); }
-    50% { color: #ff4444; }
-    75% { color: #00bfff; }
-    100% { color: var(--accent); }
+/* ========== SCRIPT STYLE 6 : BADGE ========== */
+.badge{
+ font-size:0.7em;
+ background:red;
+ padding:3px 6px;
+ border-radius:6px;
+ margin-left:5px;
 }
 
-button {
-    background: var(--accent);
-    color: black;
-    border: none;
-    padding: 15px 30px;
-    margin: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1em;
-    animation: button-glow 3s ease-in-out infinite;
+/* ========== SCRIPT STYLE 7 : FULLSCREEN BUTTON ========== */
+.full{
+ grid-column:1/-1;
+ background:#302e2c;
 }
 
-@keyframes button-glow {
-    0%,100% { box-shadow: 0 0 5px var(--accent); }
-    50% { box-shadow: 0 0 20px var(--secondary); }
+/* ========== SCRIPT STYLE 8 : FOOTER ========== */
+footer{
+ text-align:center;
+ padding:20px;
+ opacity:0.6;
+ font-size:0.8em;
 }
 
-button:hover { transform: scale(1.05); }
 </style>
 </head>
+
 <body>
 
-<h1>CHESS BATTLE RUN</h1>
+<header>♟ CHESS ARENA X</header>
 
-<div class="status" id="status-box">
-    <span class="chess-loader">♞</span>
-    <span id="status-text">Initialisation...</span>
+<div class="games">
+
+<!-- SCRIPT CARD 1 -->
+<div class="card">
+🔥 Checkmate Challenge 
+<span class="badge fire">POPULAIRE</span>
+<br><small>Bientôt disponible</small>
 </div>
 
-<div class="error" id="error-box"></div>
-
-<div class="user-card" id="user-info">
-    <p>Bienvenue, <span id="username" style="color:var(--accent); font-size: 1.2em;"></span> !</p>
-    <p style="font-size: 0.9em; opacity: 0.8;">Connexion active avec Lichess API</p>
-    <button onclick="resetConnection()" style="background:#8b0000;">Déconnexion</button>
+<!-- SCRIPT CARD 2 -->
+<div class="card">
+👥 4 Joueurs On Board
+<br><small>Bientôt disponible</small>
 </div>
 
-<div class="menu" id="game-menu" style="display:none;">
-    <h2>Menu des Jeux</h2>
-    <button onclick="alert('Ghost Master sera disponible bientôt !')">Ghost Master</button>
-    <button onclick="alert('Detective sera disponible bientôt !')">Detective</button>
-    <button onclick="alert('Gladiator sera disponible bientôt !')">Gladiator</button>
-    <button onclick="alert('Chess Forest sera disponible bientôt !')">Chess Forest</button>
-    <button onclick="alert('Échiquier 4 Joueurs sera disponible bientôt !')">Échiquier 4 Joueurs</button>
+<!-- SCRIPT CARD 3 -->
+<div class="card">
+🕵 Detective
+<br><small>Bientôt disponible</small>
 </div>
 
+<!-- SCRIPT CARD 4 -->
+<div class="card">
+👻 Ghost Master
+<br><small>Bientôt disponible</small>
+</div>
+
+<!-- SCRIPT CARD 5 -->
+<div class="card">
+🌲 Chess Forest
+<br><small>Bientôt disponible</small>
+</div>
+
+<!-- SCRIPT CARD 6 -->
+<div class="card">
+⚡ Gladiator Royale
+<br><small>Bientôt disponible</small>
+</div>
+
+<!-- SCRIPT CARD 7 -->
+<div class="card">
+🏆 Boss Arena
+<br><small>Bientôt disponible</small>
+</div>
+
+<!-- SCRIPT CARD 8 -->
+<div class="card full">
+🚀 Plus de jeux arrivent...
+</div>
+
+</div>
+
+<footer>
+Chess Arena X © 2026
+</footer>
+
+<!-- ========== SCRIPT JS 1 : CLICK EFFECT ========== -->
 <script>
-const statusEl = document.getElementById('status-text');
-const userEl = document.getElementById('user-info');
-const errorEl = document.getElementById('error-box');
-const loaderEl = document.querySelector('.chess-loader');
-const menuEl = document.getElementById('game-menu');
+document.querySelectorAll('.card').forEach(c=>{
+ c.onclick=()=>alert("Jeu bientôt disponible !");
+});
+</script>
 
-let TOKEN = localStorage.getItem('CHESS_BATTLE_TOKEN');
+<!-- ========== SCRIPT JS 2 : PARTICLES COLOR ========== -->
+<script>
+setInterval(()=>{
+ document.body.style.background=
+ "linear-gradient(45deg,#161512,#1b1a17,#161512)";
+},3000);
+</script>
 
-function showError(msg){
-    loaderEl.style.display = 'none';
-    statusEl.innerHTML = "Erreur système";
-    errorEl.innerText = msg;
-    errorEl.style.display = 'block';
-    setTimeout(()=>{ menuEl.style.display='block'; }, 1500);
-}
+<!-- ========== SCRIPT JS 3 : TITLE BLINK ========== -->
+<script>
+setInterval(()=>{
+ document.title=document.title==="Chess Arena X"?
+ "♟ Chess Arena X":"Chess Arena X";
+},1500);
+</script>
 
-async function startEngine(){
-    statusEl.innerHTML = "Boot Engine...";
-    if ('serviceWorker' in navigator){
-        navigator.serviceWorker.register('/sw.js').then(()=>console.log('SW registered')).catch(err=>console.log(err));
-    }
-
-    if (!TOKEN || TOKEN.length<20){
-        loaderEl.style.display='none';
-        TOKEN = prompt("🔑 COLLE TON TOKEN LICHESS :");
-        if (!TOKEN || TOKEN.trim().length<20){
-            statusEl.innerHTML = "Jeton manquant... redirection menu.";
-            setTimeout(()=>{ menuEl.style.display='block'; }, 500);
-            return;
-        } else {
-            localStorage.setItem('CHESS_BATTLE_TOKEN', TOKEN.trim());
-            location.reload();
-            return;
-        }
-    }
-
-    try {
-        statusEl.innerHTML = "Connexion API...";
-        const controller = new AbortController();
-        const timeout = setTimeout(()=>controller.abort(), 8000);
-        const response = await fetch('https://lichess.org/api/account', {
-            method:'GET',
-            headers:{
-                'Authorization':'Bearer '+TOKEN,
-                'Accept':'application/json'
-            },
-            signal: controller.signal
-        });
-        clearTimeout(timeout);
-
-        if (response.status===401) throw new Error("Token invalide.");
-        if (!response.ok) throw new Error("Serveur Lichess indisponible.");
-
-        const data = await response.json();
-        loaderEl.style.display='none';
-        statusEl.innerHTML="Système Prêt ✔";
-        document.getElementById('username').innerText = data.username;
-        userEl.style.display='block';
-
-        setTimeout(()=>{ menuEl.style.display='block'; }, 1000);
-
-    } catch(error){
-        if(error.name==="AbortError"){
-            showError("Temps dépassé réseau.");
-        } else {
-            showError(error.message);
-        }
-        localStorage.removeItem('CHESS_BATTLE_TOKEN');
-    }
-}
-
-function resetConnection(){
-    if(confirm("Supprimer le Token local ?")){
-        localStorage.removeItem('CHESS_BATTLE_TOKEN');
-        location.reload();
-    }
-}
-
-window.onload = startEngine;
+<!-- ========== SCRIPT JS 4 : FIRE PULSE ========== -->
+<script>
+setInterval(()=>{
+ document.querySelectorAll('.fire').forEach(f=>{
+  f.style.transform="scale(1.1)";
+  setTimeout(()=>f.style.transform="scale(1)",300);
+ });
+},1000);
 </script>
 
 </body>
