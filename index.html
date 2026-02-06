@@ -3,67 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAX - Chess Arena X</title>
+    <title>CHESS ARENA X</title>
     <style>
-        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; height: 100vh; }
-        .card { background: #1e1e1e; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 85%; max-width: 400px; border: 1px solid #333; }
-        h1 { color: #4CAF50; letter-spacing: 3px; font-size: 1.5rem; margin-bottom: 20px; }
-        #status { font-size: 1.1rem; margin-bottom: 10px; }
-        .elo { color: #FFD700; font-size: 2rem; font-weight: bold; display: block; margin-top: 10px; }
-        .btn-refresh { margin-top: 20px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { background: #161512; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .status { color: #00ff00; margin-top: 10px; font-weight: bold; }
+        .error { color: #ff4444; }
+        button { background: #45a049; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>CHESS ARENA X</h1>
-        <div id="status">Initialisation...</div>
-        <div id="player-data"></div>
-        <button class="btn-refresh" onclick="location.reload()">Actualiser</button>
-    </div>
+    <h1>CHESS ARENA X</h1>
+    <div id="app-status">Initialisation...</div>
+    <div id="user-info"></div>
+    <br>
+    <button onclick="resetToken()">Changer le Token</button>
 
     <script>
-        // CONFIGURATION
-        var TOKEN = "lip_UkoaqE3EQMXHC495d1QL"; // Ton jeton est ici
+        const statusEl = document.getElementById('app-status');
+        const userEl = document.getElementById('user-info');
 
-        function loadProfile() {
-            var status = document.getElementById('status');
-            var display = document.getElementById('player-data');
+        // Récupération sécurisée : on ne met rien en dur pour éviter le ban GitHub
+        let TOKEN = localStorage.getItem('LICHESS_TOKEN');
 
-            status.innerText = "Connexion à Lichess...";
-
-fetch('https://lichess.org', { 
-    method: 'GET',
-    headers: {
-        'Authorization': 'Bearer ' + TOKEN,
-        'Accept': 'application/json'
-    }
-})
-.then(response => response.json())
-.then(data => console.log("Connecté en tant que :", data.username))
-.catch(error => console.error("Erreur :", error));
-
-})
-
+        async function startApp() {
+            if (!TOKEN) {
+                TOKEN = prompt("Jeton Lichess requis (il ne sera pas envoyé sur GitHub) :");
+                if (TOKEN) {
+                    localStorage.setItem('LICHESS_TOKEN', TOKEN);
+                    location.reload();
+                } else {
+                    statusEl.innerHTML = "<span class='error'>Accès refusé : Token manquant.</span>";
+                    return;
                 }
-            })
-            .then(function(response) {
-                if (!response.ok) throw new Error("Erreur " + response.status);
-                return response.json();
-            })
-            .then(function(data) {
-                status.innerText = "Bienvenue, " + data.username;
-                display.innerHTML = "<span class='elo'>" + (data.perfs.blitz.rating || "N/A") + " ELO</span>" +
-                                    "<p style='color:#4CAF50'>✓ Moteur API opérationnel</p>";
-            })
-            .catch(function(error) {
-                status.innerText = "Erreur de connexion";
-                display.innerHTML = "<p style='color:#ff5252'>" + error.message + "<br>Vérifie ton jeton Lichess.</p>";
-            });
+            }
+
+            try {
+                const response = await fetch('https://lichess.org', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + TOKEN,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.status === 401) {
+                    throw new Error("Token révoqué ou expiré (Vérifie tes notifications Lichess)");
+                }
+
+                const data = await response.json();
+                statusEl.innerHTML = "Connecté avec succès !";
+                userEl.innerHTML = `Utilisateur : <strong>${data.username}</strong>`;
+                
+                // --- ICI : Lance le reste de ton projet Chess Arena X ---
+                console.log("Données reçues :", data);
+
+            } catch (error) {
+                statusEl.innerHTML = `<span class="error">Erreur : ${error.message}</span>`;
+                // Si erreur d'auth, on vide le storage pour corriger au prochain refresh
+                if (error.message.includes("401")) localStorage.removeItem('LICHESS_TOKEN');
+            }
         }
 
-        // Lancement auto
-        window.onload = loadProfile;
+        function resetToken() {
+            localStorage.removeItem('LICHESS_TOKEN');
+            location.reload();
+        }
+
+        // Lancement au chargement de la page
+        window.onload = startApp;
     </script>
 </body>
 </html>
+￼Enter
