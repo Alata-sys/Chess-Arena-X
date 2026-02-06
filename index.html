@@ -3,236 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run - Chess Arena X</title>
+<title>Chess Arena X - Chess Battle Run</title>
+
+<!-- Style -->
 <style>
-    :root {
-        --bg: #f5f5f5;
-        --card-bg: #ffffff;
-        --accent: #dbac16;
-        --text: #000000;
-        --text-muted: #555555;
-    }
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-    }
-    header {
-        text-align: center;
-        padding: 20px;
-        background: var(--accent);
-        color: #fff;
-        width: 100%;
-    }
-    header h1 {
-        margin: 0;
-        font-size: 1.8em;
-    }
-    .container {
-        max-width: 600px;
-        width: 100%;
-        padding: 20px;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    .game-card {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .game-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-    .game-info {
-        display: flex;
-        flex-direction: column;
-    }
-    .game-title {
-        font-weight: bold;
-        font-size: 1.2em;
-        margin-bottom: 5px;
-    }
-    .game-players {
-        font-size: 0.9em;
-        color: var(--text-muted);
-    }
-    .play-btn {
-        background: var(--accent);
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    .play-btn:hover {
-        background: #c99d0f;
-    }
-    footer {
-        margin-top: auto;
-        padding: 10px 0;
-        font-size: 0.8em;
-        color: var(--text-muted);
-    }
+body {
+    font-family: sans-serif;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+header {
+    text-align: center;
+    padding: 15px;
+    background: #dbac16;
+    color: black;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+.game-card {
+    width: 220px;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+.game-card:hover {
+    transform: scale(1.05);
+}
+.game-card h2 {
+    margin: 10px 0 5px 0;
+}
+.game-card p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: green;
+    font-weight: bold;
+}
+.game-card button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    font-weight: bold;
+    border: none;
+    background: #dbac16;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.board-preview {
+    width: 200px;
+    height: 200px;
+    background: #eee;
+    border: 2px solid #ccc;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+}
+.board-preview div {
+    width: 100%;
+    height: 100%;
+}
+.white { background: #fff; }
+.black { background: #888; }
+footer {
+    text-align: center;
+    padding: 10px;
+    color: #555;
+    font-size: 0.8em;
+}
 </style>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+
 </head>
 <body>
 
-<header>
-    <h1>Chess Battle Run <br><small>CBR+</small></h1>
-</header>
+<header>Chess Arena X <br> Chess Battle Run</header>
 
 <div class="container">
-    <div class="game-card" onclick="window.location.href='checkmate.html'">
-        <div class="game-info">
-            <span class="game-title">🔥 Checkmate Challenge</span>
-            <span class="game-players">3079 joueurs en ligne</span>
-        </div>
-        <button class="play-btn">Jouer</button>
+    <div class="game-card">
+        <h2>🔥 Checkmate Challenge</h2>
+        <p id="online-checkmate">0 joueurs en ligne</p>
+        <div class="board-preview" id="board-checkmate"></div>
+        <button onclick="joinGame('checkmate')">Jouer</button>
     </div>
-
-    <div class="game-card" onclick="window.location.href='chessforest.html'">
-        <div class="game-info">
-            <span class="game-title">🌲 Chess Forest</span>
-            <span class="game-players">1245 joueurs en ligne</span>
-        </div>
-        <button class="play-btn">Jouer</button>
+    <div class="game-card">
+        <h2>🌳 Chess Forest</h2>
+        <p id="online-forest">0 joueurs en ligne</p>
+        <div class="board-preview" id="board-forest"></div>
+        <button onclick="joinGame('forest')">Jouer</button>
     </div>
-
-    <div class="game-card" onclick="window.location.href='ghostmaster.html'">
-        <div class="game-info">
-            <span class="game-title">👻 Ghost Master</span>
-            <span class="game-players">986 joueurs en ligne</span>
-        </div>
-        <button class="play-btn">Jouer</button>
+    <div class="game-card">
+        <h2>👻 Ghost Master</h2>
+        <p id="online-ghost">0 joueurs en ligne</p>
+        <div class="board-preview" id="board-ghost"></div>
+        <button onclick="joinGame('ghost')">Jouer</button>
     </div>
-
-    <div class="game-card" onclick="window.location.href='detective.html'">
-        <div class="game-info">
-            <span class="game-title">🕵️ Detective</span>
-            <span class="game-players">2031 joueurs en ligne</span>
-        </div>
-        <button class="play-btn">Jouer</button>
-    </div>
-
-    <div class="game-card" onclick="window.location.href='gladiator.html'">
-        <div class="game-info">
-            <span class="game-title">✨ Gladiator Royale</span>
-            <span class="game-players">879 joueurs en ligne</span>
-        </div>
-        <button class="play-btn">Jouer</button>
-    </div>
-
-    <div class="game-card" onclick="window.location.href='boss.html'">
-        <div class="game-info">
-            <span class="game-title">🏆 Boss Challenge</span>
-            <span class="game-players">451 joueurs en ligne</span>
-        </div>
-        <button class="play-btn">Jouer</button>
+    <div class="game-card">
+        <h2>🕵️ Detective</h2>
+        <p id="online-detective">0 joueurs en ligne</p>
+        <div class="board-preview" id="board-detective"></div>
+        <button onclick="joinGame('detective')">Jouer</button>
     </div>
 </div>
 
-<footer>
-    © 2026 Alata Elyse
-</footer>
+<footer>© 2026 Alata Elyse</footer>
+
+<script>
+// 🔹 Firebase config
+const firebaseConfig = {
+    apiKey: "TA_CLE",
+    authDomain: "c-b-r-4e772.firebaseapp.com",
+    databaseURL: "https://c-b-r-4e772-default-rtdb.firebaseio.com",
+    projectId: "c-b-r-4e772",
+    storageBucket: "c-b-r-4e772.appspot.com",
+    messagingSenderId: "XXXX",
+    appId: "XXXX"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// 🔹 Fonction pour mettre à jour les joueurs en ligne
+function updateOnlinePlayers(game, elementId){
+    const ref = db.ref("rooms/" + game + "/players");
+    ref.on('value', snapshot => {
+        document.getElementById(elementId).innerText = snapshot.val() + " joueurs en ligne";
+    });
+}
+
+// 🔹 Initialiser tous les jeux
+updateOnlinePlayers('checkmate','online-checkmate');
+updateOnlinePlayers('forest','online-forest');
+updateOnlinePlayers('ghost','online-ghost');
+updateOnlinePlayers('detective','online-detective');
+
+// 🔹 Fonction pour rejoindre un jeu
+function joinGame(game){
+    alert("🚀 Tu rejoins le jeu: " + game);
+    // Ici plus tard tu rediriges vers la page du jeu correspondant
+}
+
+// 🔹 Création rapide d'un mini plateau d'échecs pour preview
+function drawBoard(boardId){
+    const board = document.getElementById(boardId);
+    for(let r=0;r<8;r++){
+        for(let c=0;c<8;c++){
+            const square = document.createElement('div');
+            square.className = (r+c)%2===0 ? 'white' : 'black';
+            board.appendChild(square);
+        }
+    }
+}
+drawBoard('board-checkmate');
+drawBoard('board-forest');
+drawBoard('board-ghost');
+drawBoard('board-detective');
+</script>
 
 </body>
-</html>￼Enter<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run</title>
-<style>
-    :root {
-        --bg: #f5f5f5;
-        --card-bg: #ffffff;
-        --accent: #dbac16;
-        --text: #000000;
-        --text-muted: #555555;
-    }
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-  background: var(--bg);
-        color: var(--text);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-    }
-    header {
-        text-align: center;
-        padding: 20px;
-        background: var(--accent);
-        color: #fff;
-        width: 100%;
-    }
-    header h1 {
-        margin: 0;
-        font-size: 1.8em;
-    }
-    .container {
-        max-width: 600px;
-        width: 100%;
-        padding: 20px;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    .game-card {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .game-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-    .game-info {
-        display: flex;
-        flex-direction: column;
-    }
-    .game-title {
-        font-weight: bold;
-        font-size: 1.2em;
-        margin-bottom: 5px;
-    }
-    .game-players {
-        font-size: 0.9em;
-        color: var(--text-muted);
-    }
-    .play-btn {
-        background: var(--accent);
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    .play-btn:hover {
-        background: #c99d0f;
-    }
-    footer {
+</html>
