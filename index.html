@@ -3,109 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run + Chess Arena X</title>
+<title>Chess Battle Run</title>
 <style>
 body {
     margin:0;
     padding:0;
     font-family:sans-serif;
-    background:#fdfdfd;
+    background:#f5f5f5;
     color:#333;
     text-align:center;
 }
 h1 {
     margin-top:30px;
-    font-size:2.2em;
+    font-size:2em;
     font-weight:bold;
-    color:#dbac16;
+    color:#333;
 }
 .menu {
     margin-top:50px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:30px;
+    gap:20px;
 }
 .game-item {
     position: relative;
     display:flex;
-    flex-direction:column;
     align-items:center;
+    justify-content:space-between;
+    width:300px;
+    padding:15px 20px;
+    background:#fff;
+    border-radius:8px;
+    border:1px solid #ddd;
     cursor:pointer;
-    transition: transform 0.2s;
+    transition:transform 0.2s;
 }
 .game-item:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
-.game-icon {
-    font-size: 3em; /* plus grand */
-    padding: 20px;
-    border-radius: 15px;
-    color:white;
-    width:120px;
-    height:120px;
+.game-info {
     display:flex;
-    align-items:center;
-    justify-content:center;
-    background: linear-gradient(45deg, #ff5f6d, #ffc371);
-    transition: background 2s ease;
+    flex-direction:column;
+    align-items:flex-start;
 }
 .game-name {
-    margin-top:10px;
-    font-size:1.2em;
     font-weight:bold;
+    font-size:1.1em;
+}
+.game-online {
+    font-size:0.9em;
+    color:#666;
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+.online-dot {
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:green;
 }
 .play-btn {
-    margin-top:10px;
-    display:none;
-    padding:8px 20px;
+    padding:6px 15px;
     font-weight:bold;
     border:none;
-    border-radius:8px;
+    border-radius:6px;
     cursor:pointer;
     color:white;
-    background: #dbac16;
+    background:#dbac16;
+    display:none;
 }
 footer {
-    margin-top:50px;
+    margin-top:40px;
     font-size:0.8em;
     color:#666;
-}
-
-/* Animation gradient douce toutes 2s */
-@keyframes gradientShift {
-    0% { background: linear-gradient(45deg, #ff5f6d, #ffc371); }
-    50% { background: linear-gradient(45deg, #6a82fb, #fc5c7d); }
-    100% { background: linear-gradient(45deg, #43cea2, #185a9d); }
 }
 </style>
 </head>
 <body>
 
-<h1>Chess Battle Run + Chess Arena X</h1>
+<h1>Chess Battle Run</h1>
 
 <div class="menu">
     <div class="game-item" onclick="showPlay(this,'Checkmate.html')">
-        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">🔥</div>
-        <div class="game-name">Checkmate Challenge</div>
+        <div class="game-info">
+            <div class="game-name">Checkmate Challenge</div>
+            <div class="game-online"><span class="online-dot"></span> 3079 joueurs en ligne</div>
+        </div>
         <button class="play-btn">Jouer</button>
     </div>
 
     <div class="game-item" onclick="showPlay(this,'ChessForest.html')">
-        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">🌳</div>
-        <div class="game-name">Chess Forest</div>
+        <div class="game-info">
+            <div class="game-name">Chess Forest</div>
+            <div class="game-online"><span class="online-dot"></span> 1245 joueurs en ligne</div>
+        </div>
         <button class="play-btn">Jouer</button>
     </div>
 
     <div class="game-item" onclick="showPlay(this,'Ghost.html')">
-        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">👻</div>
-        <div class="game-name">Ghost Master</div>
+        <div class="game-info">
+            <div class="game-name">Ghost Master</div>
+            <div class="game-online"><span class="online-dot"></span> 986 joueurs en ligne</div>
+        </div>
         <button class="play-btn">Jouer</button>
     </div>
 
     <div class="game-item" onclick="showPlay(this,'Detective.html')">
-        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">🕵️</div>
-        <div class="game-name">Detective</div>
+        <div class="game-info">
+            <div class="game-name">Detective</div>
+            <div class="game-online"><span class="online-dot"></span> 2031 joueurs en ligne</div>
+        </div>
         <button class="play-btn">Jouer</button>
     </div>
 </div>
@@ -113,8 +122,7 @@ footer {
 <footer>© 2026 Alata Elyse</footer>
 
 <script>
-// Affiche le bouton jouer quand on clique sur l'icône et redirige
-function showPlay(item,url){
+function showPlay(item, url){
     const btn = item.querySelector('.play-btn');
     if(btn.style.display==='none'){
         btn.style.display='block';
@@ -123,7 +131,7 @@ function showPlay(item,url){
         btn.style.display='none';
     }
 }
-</script>
+</script>⭐
 
-</body>
-</html>
+</body>💤
+</html>🕳️
