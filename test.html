@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Test Chessboard</title>
+<link rel="stylesheet" href="chessboard.js"> <!-- on testera ensuite -->
+<link rel="stylesheet" href="chessboard.css">
+<style>
+body { font-family: sans-serif; text-align: center; padding: 20px; }
+#chessboard { width: 400px; height: 400px; margin: 20px auto; }
+</style>
+</head>
+<body>
+
+<h1>Test Échiquier</h1>
+<div id="chessboard"></div>
+
+<script src="chessboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    const board = Chessboard('chessboard', {
+        draggable: true,
+        position: 'start',
+        pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/img/chesspieces/wikipedia/{piece}.png'
+    });
+});
+</script>
+
+</body>
+</html>
