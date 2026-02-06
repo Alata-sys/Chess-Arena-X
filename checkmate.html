@@ -1,4 +1,4 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -10,7 +10,7 @@ here<!DOCTYPE html>
 
 <style>
 body { background:#161512; color:white; text-align:center; font-family:sans-serif; }
-#board { width: 320px; margin:auto; }
+#board { width: 320px; margin:auto; margin-top:20px; }
 button { padding:10px 20px; margin-top:10px; border:none; border-radius:6px; background:#dbac16; color:black; font-weight:bold; cursor:pointer; }
 </style>
 </head>
@@ -31,35 +31,22 @@ let moveIndex = 0;
 // Afficher échiquier
 board = Chessboard('board', {draggable:true, position:'start', onDrop:onDrop});
 
-// Générer une position aléatoire
+// Liste de puzzles mate connus (FEN + solution)
+const puzzles = [
+    {fen:"8/8/8/8/8/6k1/5Q2/5K2 w - - 0 1", solution:["f2f6"]}, // Mate en 1
+    {fen:"8/8/8/5Q2/8/6k1/8/5K2 w - - 0 1", solution:["f5f6"]},  // Mate en 1
+    {fen:"8/8/5Q2/8/6k1/8/8/5K2 w - - 0 1", solution:["f6f7"]}, // Mate en 1
+    {fen:"6k1/5pp1/8/8/8/8/5Q2/5K2 w - - 0 1", solution:["f2f7"]}, // Mate en 1
+    {fen:"8/5k2/5pp1/8/8/8/5Q2/5K2 w - - 0 1", solution:["f2f7"]}, // Mate en 1
+];
+
+// Générer un puzzle aléatoire
 function generatePuzzle() {
-    game.reset();
     moveIndex = 0;
-    solutionMoves = [];
-
-    // Boucle de placement aléatoire pour créer des positions simples
-    const pieces = ['p','n','b','r','q','k'];
-    for(let i=0;i<10;i++){
-        let x = Math.floor(Math.random()*8);
-        let y = Math.floor(Math.random()*8);
-        let piece = pieces[Math.floor(Math.random()*pieces.length)];
-        let color = Math.random()<0.5?'w':'b';
-        game.put({type:piece,color:color},String.fromCharCode(97+x)+String(y+1));
-    }
-
+    const puzzle = puzzles[Math.floor(Math.random()*puzzles.length)];
+    game.load(puzzle.fen);
     board.position(game.fen());
-
-    // Demander au moteur Stockfish de trouver mate en 2 coups
-    stockfish.onmessage = function(event){
-        const line = event.data;
-        if(line.startsWith('bestmove')){
-            let move = line.split(' ')[1];
-            solutionMoves = [move]; // solution simple pour début
-        }
-    };
-
-    stockfish.postMessage("position fen "+game.fen());
-    stockfish.postMessage("go mate 2");
+    solutionMoves = puzzle.solution;
 }
 
 // Vérifier le coup du joueur
@@ -71,7 +58,7 @@ function onDrop(source, target) {
     if(userMove===solutionMoves[moveIndex]){
         moveIndex++;
         if(moveIndex>=solutionMoves.length){
-            alert("Mate réussi !");
+            alert("✅ Mate réussi !");
             generatePuzzle();
         }
     } else {
@@ -79,6 +66,9 @@ function onDrop(source, target) {
         return 'snapback';
     }
 }
+
+// Initialiser premier puzzle
+generatePuzzle();
 </script>
 
 </body>
