@@ -3,50 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Arena X - Menu</title>
+<title>Chess Battle Run + Chess Arena X</title>
 <style>
 body {
     margin:0;
     padding:0;
     font-family:sans-serif;
-    background:#fdf6e3;
+    background:#fdfdfd;
     color:#333;
     text-align:center;
-    overflow-x:hidden;
 }
 h1 {
     margin-top:30px;
-    font-size:2.5em;
+    font-size:2.2em;
+    font-weight:bold;
     color:#dbac16;
-    animation: glow 1s infinite alternate;
-}
-@keyframes glow {
-    from { text-shadow: 0 0 5px #dbac16; }
-    to { text-shadow: 0 0 20px #ffdd00, 0 0 30px #dbac16; }
 }
 .menu {
     margin-top:50px;
     display:flex;
     flex-direction:column;
-    gap:20px;
     align-items:center;
+    gap:30px;
 }
-.menu button {
-    font-size:1.3em;
-    padding:15px 40px;
-    border:none;
-    border-radius:10px;
+.game-item {
+    position: relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     cursor:pointer;
-    font-weight:bold;
-    color:white;
-    background: linear-gradient(45deg, #ff5f6d, #ffc371);
-    animation: btnColor 1s infinite alternate;
     transition: transform 0.2s;
 }
-.menu button:hover {
-    transform: scale(1.1);
+.game-item:hover {
+    transform: scale(1.05);
 }
-@keyframes btnColor {
+.game-icon {
+    font-size: 3em; /* plus grand */
+    padding: 20px;
+    border-radius: 15px;
+    color:white;
+    width:120px;
+    height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(45deg, #ff5f6d, #ffc371);
+    transition: background 2s ease;
+}
+.game-name {
+    margin-top:10px;
+    font-size:1.2em;
+    font-weight:bold;
+}
+.play-btn {
+    margin-top:10px;
+    display:none;
+    padding:8px 20px;
+    font-weight:bold;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:white;
+    background: #dbac16;
+}
+footer {
+    margin-top:50px;
+    font-size:0.8em;
+    color:#666;
+}
+
+/* Animation gradient douce toutes 2s */
+@keyframes gradientShift {
     0% { background: linear-gradient(45deg, #ff5f6d, #ffc371); }
     50% { background: linear-gradient(45deg, #6a82fb, #fc5c7d); }
     100% { background: linear-gradient(45deg, #43cea2, #185a9d); }
@@ -55,15 +82,48 @@ h1 {
 </head>
 <body>
 
-<h1>🎯 Chess Arena X</h1>
+<h1>Chess Battle Run + Chess Arena X</h1>
 
 <div class="menu">
-    <button onclick="window.location.href='Checkmate.html'">🔥 Checkmate Challenge</button>
-    <button onclick="window.location.href='ChessForest.html'">🌳 Chess Forest</button>
-    <button onclick="window.location.href='Ghost.html'">👻 Ghost Master</button>
-    <button onclick="window.location.href='Detective.html'">🕵️ Detective</button>
-    <button onclick="alert('Bientôt disponible !')">🎲 Plus de jeux...</button>
+    <div class="game-item" onclick="showPlay(this,'Checkmate.html')">
+        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">🔥</div>
+        <div class="game-name">Checkmate Challenge</div>
+        <button class="play-btn">Jouer</button>
+    </div>
+
+    <div class="game-item" onclick="showPlay(this,'ChessForest.html')">
+        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">🌳</div>
+        <div class="game-name">Chess Forest</div>
+        <button class="play-btn">Jouer</button>
+    </div>
+
+    <div class="game-item" onclick="showPlay(this,'Ghost.html')">
+        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">👻</div>
+        <div class="game-name">Ghost Master</div>
+        <button class="play-btn">Jouer</button>
+    </div>
+
+    <div class="game-item" onclick="showPlay(this,'Detective.html')">
+        <div class="game-icon" style="animation: gradientShift 4s ease infinite alternate;">🕵️</div>
+        <div class="game-name">Detective</div>
+        <button class="play-btn">Jouer</button>
+    </div>
 </div>
+
+<footer>© 2026 Alata Elyse</footer>
+
+<script>
+// Affiche le bouton jouer quand on clique sur l'icône et redirige
+function showPlay(item,url){
+    const btn = item.querySelector('.play-btn');
+    if(btn.style.display==='none'){
+        btn.style.display='block';
+        btn.onclick = ()=>{ window.location.href = url; }
+    } else {
+        btn.style.display='none';
+    }
+}
+</script>
 
 </body>
 </html>
