@@ -1,51 +1,5 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <link rel="manifest" href="manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chess Battle Run</title>
-    <style>
-        :root { --bg: #161512; --accent: #dbac16; --success: #629924; }
-        body { background: var(--bg); color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        .container { background: #262421; border-radius: 10px; padding: 20px; max-width: 450px; margin: 0 auto; border-top: 5px solid var(--accent); }
-        .status { margin: 15px 0; font-weight: bold; }
-        .user-card { background: #302e2c; padding: 15px; border-radius: 5px; display: none; margin-top: 20px; }
-        button { background: var(--accent); color: black; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .error { color: #ff4444; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 5px; display: none; }
-
-        /* Animation des pièces d'échecs */
-        .chess-loader {
-            display: inline-block;
-            font-size: 2em;
-            animation: bounce 0.8s infinite alternate;
-            margin-right: 10px;
-        }
-
-        @keyframes bounce {
-            0% { transform: translateY(0); color: white; }
-            100% { transform: translateY(-10px); color: var(--accent); }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>CHESS BATTLE RUN</h1>
-        
-        <div id="status-box" class="status">
-            <span class="chess-loader">♞</span> <!-- Symbole Cavalier pour l'animation -->
-            <span id="status-text">Initialisation...</span>
-        </div>
-        <div id="error-box" class="error"></div>
-
-        <div id="user-info" class="user-card">
-            <p>Bienvenue, <span id="username" style="color:var(--accent); font-size: 1.2em;"></span> !</p>
-            <p style="font-size: 0.9em; opacity: 0.8;">Connexion active avec Lichess API</p>
-            <button onclick="resetConnection()" style="background:#8b0000;">Déconnexion</button>
-        </div>
-    </div>
 <script>
+const statusEl = documen<script>
 const statusEl = document.getElementById('status-text');
 const userEl = document.getElementById('user-info');
 const errorEl = document.getElementById('error-box');
@@ -61,23 +15,28 @@ function showError(msg){
 }
 
 async function startEngine() {
-
     statusEl.innerHTML = "Boot Engine...";
-    
+
+    // 🔹 Service Worker (optionnel)
     if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-    .then(() => console.log('Service Worker Registered'))
-    .catch(err => console.log(err));
+        navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.log(err));
     }
+
+    // 🔹 Skip API pour tester le menu si token absent ou mobile
     if (!TOKEN || TOKEN.length < 20) {
         loaderEl.style.display = 'none';
         TOKEN = prompt("🔑 CONFIGURATION CHESS BATTLE RUN\nColle ton Token Lichess ici :");
 
-        if (TOKEN && TOKEN.trim().length > 20) {
+        if (!TOKEN || TOKEN.trim().length < 20) {
+            statusEl.innerHTML = "Jeton manquant... Redirection vers menu.";
+            // Redirection directe vers le menu
+            setTimeout(() => { window.location.href = 'index.html'; }, 500);
+            return;
+        } else {
             localStorage.setItem('CHESS_BATTLE_TOKEN', TOKEN.trim());
             location.reload();
-        } else {
-            statusEl.innerHTML = "Jeton manquant...";
             return;
         }
     }
@@ -85,10 +44,11 @@ async function startEngine() {
     try {
         statusEl.innerHTML = "Connexion API...";
 
+        // 🔹 Timeout pour fetch
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 8000);
-        const response = await fetch('https://lichess.org/api/account', { ... });
 
+        const response = await fetch('https://lichess.org/api/account', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + TOKEN,
@@ -104,20 +64,24 @@ async function startEngine() {
 
         const data = await response.json();
 
+        // 🔹 Affichage du succès
         loaderEl.style.display = 'none';
         statusEl.innerHTML = "Système Prêt ✔";
         document.getElementById('username').innerText = data.username;
         userEl.style.display = 'block';
 
-    } catch (error) {
+        // 🔹 Redirection automatique vers le menu
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
 
+    } catch (error) {
         if(error.name === "AbortError"){
-            showError("Temps dépassé réseau.");
+            showError("Temps dépassé réseau. Redirection vers menu...");
         } else {
-            showError(error.message);
+            showError(error.message + " Redirection vers menu...");
         }
 
         localStorage.removeItem('CHESS_BATTLE_TOKEN');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1500);
     }
 }
 
@@ -129,21 +93,4 @@ function resetConnection() {
 }
 
 window.onload = startEngine;
-    if (response.ok) {
-    const data = await response.json();
-    
-    // Succès
-    loaderEl.style.display = 'none';
-    statusEl.innerHTML = "Système Prêt ✔";
-    document.getElementById('username').innerText = data.username;
-    userEl.style.display = 'block';
-
-    // 🔹 Redirection automatique vers le menu des jeux après 1s
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1000);
-    }
-</script>
-</body>
-</html>
-
+</script>￼Enter
