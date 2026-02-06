@@ -3,58 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Arena X</title>
+<title>Chess Arena X - Menu</title>
 <style>
 body {
     margin:0;
     padding:0;
     font-family:sans-serif;
-    background:#161512;
-    color:white;
+    background:#fdf6e3;
+    color:#333;
     text-align:center;
+    overflow-x:hidden;
 }
 h1 {
     margin-top:30px;
     font-size:2.5em;
     color:#dbac16;
-    animation: glow 1.5s infinite alternate;
+    animation: glow 1s infinite alternate;
 }
 @keyframes glow {
     from { text-shadow: 0 0 5px #dbac16; }
-    to   { text-shadow: 0 0 20px #ffdd00, 0 0 30px #dbac16; }
+    to { text-shadow: 0 0 20px #ffdd00, 0 0 30px #dbac16; }
 }
-.game-btn {
-    display:block;
-    width:250px;
-    margin:15px auto;
-    padding:15px;
+.menu {
+    margin-top:50px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    align-items:center;
+}
+.menu button {
+    font-size:1.3em;
+    padding:15px 40px;
     border:none;
     border-radius:10px;
-    background:linear-gradient(45deg,#dbac16,#ff9900);
-    color:black;
-    font-size:1.2em;
-    font-weight:bold;
     cursor:pointer;
-    transition: all 0.3s ease;
+    font-weight:bold;
+    color:white;
+    background: linear-gradient(45deg, #ff5f6d, #ffc371);
+    animation: btnColor 1s infinite alternate;
+    transition: transform 0.2s;
 }
-.game-btn:hover {
+.menu button:hover {
     transform: scale(1.1);
-    box-shadow:0 0 15px #ffcc00;
 }
-.note { margin-top:10px; font-size:0.9em; opacity:0.8; }
+@keyframes btnColor {
+    0% { background: linear-gradient(45deg, #ff5f6d, #ffc371); }
+    50% { background: linear-gradient(45deg, #6a82fb, #fc5c7d); }
+    100% { background: linear-gradient(45deg, #43cea2, #185a9d); }
+}
 </style>
 </head>
 <body>
 
-<h1>♟️ Chess Arena X</h1>
-<p class="note">Interface publique - Jeux bientôt disponibles !</p>
+<h1>🎯 Chess Arena X</h1>
 
-<button class="game-btn" onclick="window.location.href='checkmate.html'">🔥 Checkmate Challenge</button>
-<button class="game-btn" onclick="window.location.href='4players.html'">🎲 4 Joueurs on Board</button>
-<button class="game-btn" onclick="window.location.href='detective.html'">🕵️ Detective</button>
-<button class="game-btn" onclick="window.location.href='ghost.html'">👻 Ghost Master</button>
-<button class="game-btn" onclick="window.location.href='chessforest.html'">🌳 Chess Forest</button>
-<button class="game-btn" onclick="alert('🎯 Plus de jeux bientôt !')">✨ Plus de jeux</button>
+<div class="menu">
+    <button onclick="window.location.href='Checkmate.html'">🔥 Checkmate Challenge</button>
+    <button onclick="window.location.href='ChessForest.html'">🌳 Chess Forest</button>
+    <button onclick="window.location.href='Ghost.html'">👻 Ghost Master</button>
+    <button onclick="window.location.href='Detective.html'">🕵️ Detective</button>
+    <button onclick="alert('Bientôt disponible !')">🎲 Plus de jeux...</button>
+</div>
 
 </body>
 </html>
