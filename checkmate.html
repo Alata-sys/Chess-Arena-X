@@ -5,14 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkmate Challenge</title>
 
-<!-- CSS local chessboard -->
+<!-- CSS Chessboard local -->
 <link rel="stylesheet" href="chessboard.css">
 
 <style>
 body { font-family: sans-serif; text-align: center; background: #f8f8f8; padding: 20px; }
 h1 { color: #dbac16; margin-bottom: 10px; }
 #status { font-weight: bold; margin: 10px 0; }
-#chessboard { width: 480px; height: 480px; margin: 20px auto; border: 2px solid #ccc; }
+#chessboard {
+    width: 480px;
+    height: 480px;
+    margin: 20px auto;
+    border: 2px solid #ccc;
+}
 button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #dbac16; border: none; border-radius: 5px; margin-top: 10px; }
 </style>
 </head>
@@ -23,12 +28,12 @@ button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #dbac
 <div id="chessboard"></div>
 <button id="newPuzzle">Nouveau Puzzle</button>
 
-<!-- Librairies locales -->
+<!-- Librairies -->
 <script src="chessboard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function() {
 
     const game = new Chess();
 
@@ -50,11 +55,11 @@ document.addEventListener("DOMContentLoaded", function(){
         document.getElementById('status').innerText = "Puzzle chargé ! Bonne chance !";
     }
 
-    // Exemple puzzle initial
+    // Puzzle initial (échiquier complet)
     const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     displayPuzzle(startingFen);
 
-    // Bouton Nouveau Puzzle
+    // Nouveau Puzzle (exemple)
     document.getElementById('newPuzzle').addEventListener('click', () => {
         const sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
         displayPuzzle(sampleFen);
@@ -63,4 +68,4 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 </body>
-</html>￼Enter
+</html>
