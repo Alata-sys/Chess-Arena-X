@@ -1,7 +1,17 @@
-"icons": [
-  {
-    "src": "/Chess-Arena-X/icon.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+{
+  "name": "Chess Battle Run",
+  "short_name": "CBR",
+  "description": "Plateforme d'échecs asymétrique avec Boss Challenges et Power-Ups, prototype pour Android.",
+  "start_url": "/Chess-Arena-X/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#161512",
+  "theme_color": "#dbac16",
+  "icons": [
+    {
+      "src": "/Chess-Arena-X/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
