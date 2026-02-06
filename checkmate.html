@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Checkmate Challenge</title>
+
+<link rel="stylesheet" 
+href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/css/chessboard.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0/chess.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/js/chessboard.min.js"></script>
+
+<style>
+body {
+  background:#161512;
+  color:white;
+  text-align:center;
+  font-family:sans-serif;
+}
+#board { width:320px; margin:auto; }
+button {
+  padding:10px;
+  background:#dbac16;
+  border:none;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔥 Checkmate Challenge</h2>
+<div id="board"></div>
+<br>
+<button onclick="loadPuzzle()">Nouveau Puzzle</button>
+
+<script>
+let board = null;
+let game = new Chess();
+let solutionMoves = [];
+let moveIndex = 0;
+
+// Charger puzzle Lichess
+async function loadPuzzle() {
+  const res = await fetch("https://lichess.org/api/puzzle/daily");
+  const data = await res.json();
+
+  const fen = data.game.fen;
+  solutionMoves = data.puzzle.solution;
+  moveIndex = 0;
+
+  game.load(fen);
+  board.position(fen);
+}
+
+// drag & drop
+function onDrop(source, target) {
+  let move = game.move({
+    from: source,
+    to: target,
+    promotion: 'q'
+  });
+
+  if (move === null) return 'snapback';
+
+  let userMove = move.from + move.to;
+
+  if (userMove === solutionMoves[moveIndex]) {
+    moveIndex++;
+    if (moveIndex >= solutionMoves.length) {
+      alert("Mate réussi !");
+      loadPuzzle();
+    }
+  } else {
+    alert("Mauvais coup !");
+    game.undo();
+    return 'snapback';
+  }
+}
+
+board = Chessboard('board', {
+  draggable: true,
+  position: 'start',
+  onDrop: onDrop
+});
+
+loadPuzzle();
+</script>
+
+</body>
+</html>
