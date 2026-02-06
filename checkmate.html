@@ -88,7 +88,33 @@ board = Chessboard('chessboard', {
         updateStatus("Vous avez joué : " + move.san);
     }
 });
+// Crée un worker Stockfish
+let engine = new Worker('stockfish.js');
+engine.postMessage("uci");
+engine.postMessage("isready");
 
+engine.onmessage = function(event){
+    console.log("Stockfish:", event.data);
+}
+
+// Fonction pour demander un mate en N coups
+function generateMatePuzzle(fen, depth = 6){
+    game.load(fen); // Charger position initiale
+    engine.postMessage("position fen " + fen);
+    engine.postMessage("go depth " + depth);
+
+    engine.onmessage = function(event){
+        let line = event.data;
+        if(line.startsWith("bestmove")){
+            let move = line.split(" ")[1];
+            console.log("Move recommandé:", move);
+
+            // Ici on peut calculer la solution complète plus tard
+            displayPuzzle(fen); // Affiche position sur l'échiquier
+            updateStatus("Puzzle généré par Stockfish !");
+        }
+    }
+    }
 /* -----------------------------
       Nouveau Puzzle
 -------------------------------*/
