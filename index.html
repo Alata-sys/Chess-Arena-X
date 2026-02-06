@@ -3,138 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run</title>
-
+<title>Chess Arena X</title>
 <style>
-:root {
-  --bg:#161512;
-  --accent:#dbac16;
-  --highlight:#ff4444;
-  --card:#262421;
-}
-
 body {
-  margin:0;
-  font-family:sans-serif;
-  background:var(--bg);
-  color:white;
-  text-align:center;
+    margin:0;
+    padding:0;
+    font-family:sans-serif;
+    background:#161512;
+    color:white;
+    text-align:center;
 }
-
 h1 {
-  color:var(--accent);
-  margin:20px 0;
-  animation: glow 2s infinite alternate;
+    margin-top:30px;
+    font-size:2.5em;
+    color:#dbac16;
+    animation: glow 1.5s infinite alternate;
 }
-
 @keyframes glow {
-  0%{text-shadow:0 0 5px #dbac16;}
-  50%{text-shadow:0 0 20px #dbac16;}
-  100%{text-shadow:0 0 10px #dbac16;}
+    from { text-shadow: 0 0 5px #dbac16; }
+    to   { text-shadow: 0 0 20px #ffdd00, 0 0 30px #dbac16; }
 }
-
-.game-card {
-  background:var(--card);
-  margin:20px auto;
-  padding:15px;
-  border-radius:10px;
-  max-width:400px;
-  border-top:5px solid var(--accent);
-  transition: transform 0.2s, box-shadow 0.2s;
+.game-btn {
+    display:block;
+    width:250px;
+    margin:15px auto;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(45deg,#dbac16,#ff9900);
+    color:black;
+    font-size:1.2em;
+    font-weight:bold;
+    cursor:pointer;
+    transition: all 0.3s ease;
 }
-
-.game-card:hover {
-  transform: scale(1.05);
-  box-shadow:0 0 15px var(--accent);
+.game-btn:hover {
+    transform: scale(1.1);
+    box-shadow:0 0 15px #ffcc00;
 }
-
-button {
-  padding:10px 20px;
-  margin-top:10px;
-  border:none;
-  border-radius:6px;
-  background:var(--accent);
-  color:black;
-  font-weight:bold;
-  cursor:pointer;
-  transition: all 0.2s;
-}
-
-button:hover {
-  background:#ffba00;
-}
-
-h3 {
-  margin:0;
-  font-size:1.3em;
-}
-
-p {
-  font-size:0.9em;
-  opacity:0.8;
-}
-
-/* Animation feu pour Checkmate Challenge */
-.checkmate-fire {
-  display:inline-block;
-  color:#ff3300;
-  font-weight:bold;
-  animation: fire 1s infinite alternate;
-}
-
-@keyframes fire {
-  0%{text-shadow:0 0 5px #ff3300;}
-  50%{text-shadow:0 0 20px #ff6600;}
-  100%{text-shadow:0 0 10px #ff3300;}
-}
+.note { margin-top:10px; font-size:0.9em; opacity:0.8; }
 </style>
 </head>
-
 <body>
 
-<h1>CHESS BATTLE RUN 🎯</h1>
+<h1>♟️ Chess Arena X</h1>
+<p class="note">Interface publique - Jeux bientôt disponibles !</p>
 
-<!-- ✅ Checkmate Challenge -->
-<div class="game-card">
-  <h3><span class="checkmate-fire">🔥</span> Checkmate Challenge</h3>
-  <p>Testez vos mates en temps réel !</p>
-  <button onclick="window.location.href='checkmate.html'">Jouer</button>
-</div>
-
-<!-- 👻 Ghost Master -->
-<div class="game-card">
-  <h3>👻 Ghost Master</h3>
-  <p>Bientôt disponible !</p>
-  <button onclick="window.location.href='ghostmaster.html'">Jouer</button>
-</div>
-
-<!-- 🕵️ Detective -->
-<div class="game-card">
-  <h3>🕵️ Detective</h3>
-  <p>Bientôt disponible !</p>
-  <button onclick="window.location.href='detective.html'">Jouer</button>
-</div>
-
-<!-- 🌲 Chess Forest -->
-<div class="game-card">
-  <h3>🌲 Chess Forest</h3>
-  <p>Échiquier gigantesque avec pièges !</p>
-  <button onclick="window.location.href='chessforest.html'">Jouer</button>
-</div>
-
-<!-- 4 Joueurs -->
-<div class="game-card">
-  <h3>🎲 4 Joueurs sur le même board</h3>
-  <p>Noir / Blanc / Bleu / Vert</p>
-  <button onclick="window.location.href='4players.html'">Jouer</button>
-</div>
-
-<!-- Ajouter ici d'autres jeux si nécessaire -->
-<div class="game-card">
-  <h3>⚡ Prochains jeux</h3>
-  <p>Ghost Arena, Puzzle Racer avancé, etc…</p>
-  <button disabled>À venir</button>
-</div>
+<button class="game-btn" onclick="window.location.href='checkmate.html'">🔥 Checkmate Challenge</button>
+<button class="game-btn" onclick="window.location.href='4players.html'">🎲 4 Joueurs on Board</button>
+<button class="game-btn" onclick="window.location.href='detective.html'">🕵️ Detective</button>
+<button class="game-btn" onclick="window.location.href='ghost.html'">👻 Ghost Master</button>
+<button class="game-btn" onclick="window.location.href='chessforest.html'">🌳 Chess Forest</button>
+<button class="game-btn" onclick="alert('🎯 Plus de jeux bientôt !')">✨ Plus de jeux</button>
 
 </body>
 </html>
