@@ -1,90 +1,84 @@
-<!DOCTYPE html>
-<html>
+here<!DOCTYPE html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <title>Checkmate Challenge</title>
 
-<link rel="stylesheet" 
-href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/css/chessboard.min.css">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/css/chessboard.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0/chess.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/js/chessboard.min.js"></script>
 
 <style>
-body {
-  background:#161512;
-  color:white;
-  text-align:center;
-  font-family:sans-serif;
-}
-#board { width:320px; margin:auto; }
-button {
-  padding:10px;
-  background:#dbac16;
-  border:none;
-  font-weight:bold;
-}
+body { background:#161512; color:white; text-align:center; font-family:sans-serif; }
+#board { width: 320px; margin:auto; }
+button { padding:10px 20px; margin-top:10px; border:none; border-radius:6px; background:#dbac16; color:black; font-weight:bold; cursor:pointer; }
 </style>
 </head>
-
 <body>
 
 <h2>🔥 Checkmate Challenge</h2>
 <div id="board"></div>
-<br>
-<button onclick="loadPuzzle()">Nouveau Puzzle</button>
+<button onclick="generatePuzzle()">Nouveau Puzzle</button>
 
+<script src="https://cdn.jsdelivr.net/gh/niklasf/stockfish.js/stockfish.js"></script>
 <script>
 let board = null;
 let game = new Chess();
+let stockfish = Stockfish(); // moteur WebAssembly
 let solutionMoves = [];
 let moveIndex = 0;
 
-// Charger puzzle Lichess
-async function loadPuzzle() {
-  const res = await fetch("https://lichess.org/api/puzzle/daily");
-  const data = await res.json();
+// Afficher échiquier
+board = Chessboard('board', {draggable:true, position:'start', onDrop:onDrop});
 
-  const fen = data.game.fen;
-  solutionMoves = data.puzzle.solution;
-  moveIndex = 0;
+// Générer une position aléatoire
+function generatePuzzle() {
+    game.reset();
+    moveIndex = 0;
+    solutionMoves = [];
 
-  game.load(fen);
-  board.position(fen);
-}
-
-// drag & drop
-function onDrop(source, target) {
-  let move = game.move({
-    from: source,
-    to: target,
-    promotion: 'q'
-  });
-
-  if (move === null) return 'snapback';
-
-  let userMove = move.from + move.to;
-
-  if (userMove === solutionMoves[moveIndex]) {
-    moveIndex++;
-    if (moveIndex >= solutionMoves.length) {
-      alert("Mate réussi !");
-      loadPuzzle();
+    // Boucle de placement aléatoire pour créer des positions simples
+    const pieces = ['p','n','b','r','q','k'];
+    for(let i=0;i<10;i++){
+        let x = Math.floor(Math.random()*8);
+        let y = Math.floor(Math.random()*8);
+        let piece = pieces[Math.floor(Math.random()*pieces.length)];
+        let color = Math.random()<0.5?'w':'b';
+        game.put({type:piece,color:color},String.fromCharCode(97+x)+String(y+1));
     }
-  } else {
-    alert("Mauvais coup !");
-    game.undo();
-    return 'snapback';
-  }
+
+    board.position(game.fen());
+
+    // Demander au moteur Stockfish de trouver mate en 2 coups
+    stockfish.onmessage = function(event){
+        const line = event.data;
+        if(line.startsWith('bestmove')){
+            let move = line.split(' ')[1];
+            solutionMoves = [move]; // solution simple pour début
+        }
+    };
+
+    stockfish.postMessage("position fen "+game.fen());
+    stockfish.postMessage("go mate 2");
 }
 
-board = Chessboard('board', {
-  draggable: true,
-  position: 'start',
-  onDrop: onDrop
-});
+// Vérifier le coup du joueur
+function onDrop(source, target) {
+    let move = game.move({from:source,to:target,promotion:'q'});
+    if(move===null) return 'snapback';
+    let userMove = move.from+move.to;
 
-loadPuzzle();
+    if(userMove===solutionMoves[moveIndex]){
+        moveIndex++;
+        if(moveIndex>=solutionMoves.length){
+            alert("Mate réussi !");
+            generatePuzzle();
+        }
+    } else {
+        game.undo();
+        return 'snapback';
+    }
+}
 </script>
 
 </body>
