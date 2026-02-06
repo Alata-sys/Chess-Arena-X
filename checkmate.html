@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkmate Challenge</title>
+
+<!-- Chessboard.js -->
 <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
 <style>
     body {
@@ -12,12 +14,22 @@
         text-align: center;
         padding: 20px;
     }
-    h1 { color: #dbac16; }
-    #chessboard { width: 400px; margin: 20px auto; }
-    #status { font-weight: bold; margin: 15px 0; }
-    button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #dbac16; border: none; border-radius: 5px; }
+    h1 { color: #dbac16; margin-bottom: 10px; }
+    #chessboard { width: 480px; margin: 20px auto; }
+    #status { font-weight: bold; margin: 15px 0; font-size: 1.1em; }
+    button {
+        padding: 12px 25px;
+        font-size: 16px;
+        cursor: pointer;
+        background: #dbac16;
+        border: none;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
 </style>
-<script src="stockfish.js"></script> <!-- Ton fichier moteur -->
+
+<!-- Librairies -->
+<script src="stockfish.js"></script> <!-- Stockfish.js dans ton projet -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
 <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -27,6 +39,8 @@
 
 <h1>🔥 Checkmate Challenge</h1>
 <p id="status">En attente du puzzle...</p>
+
+<!-- Échiquier -->
 <div id="chessboard"></div>
 <button id="newPuzzle">Nouveau Puzzle</button>
 
@@ -53,16 +67,22 @@ const db = firebase.database();
 let engine = new Worker('stockfish.js');
 engine.postMessage("uci");
 engine.postMessage("isready");
-
-engine.onmessage = function(event) {
-    console.log("Stockfish:", event.data);
-}
+engine.onmessage = (event) => console.log("Stockfish:", event.data);
 
 /* -----------------------------
       Chessboard Setup
 -------------------------------*/
-let board;
 let game = new Chess();
+let board = Chessboard('chessboard', {
+    draggable: true,
+    position: 'start',
+    pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/img/chesspieces/wikipedia/{piece}.png',
+    onDrop: function(source, target){
+        let move = game.move({ from: source, to: target, promotion: 'q' });
+        if(move === null) return 'snapback';
+        updateStatus("Vous avez joué : " + move.san);
+    }
+});
 
 function updateStatus(msg){
     document.getElementById('status').innerText = msg;
@@ -75,59 +95,17 @@ function displayPuzzle(fen){
 }
 
 /* -----------------------------
-      Init Chessboard
--------------------------------*/
-board = Chessboard('chessboard', {
-    draggable: true,
-    position: 'start',
-    onDrop: (source, target, piece, newPos, oldPos, orientation) => {
-        let move = game.move({ from: source, to: target, promotion: 'q' });
-        if(move === null){
-            return 'snapback';
-        }
-        updateStatus("Vous avez joué : " + move.san);
-    }
-});
-// Crée un worker Stockfish
-let engine = new Worker('stockfish.js');
-engine.postMessage("uci");
-engine.postMessage("isready");
-
-engine.onmessage = function(event){
-    console.log("Stockfish:", event.data);
-}
-
-// Fonction pour demander un mate en N coups
-function generateMatePuzzle(fen, depth = 6){
-    game.load(fen); // Charger position initiale
-    engine.postMessage("position fen " + fen);
-    engine.postMessage("go depth " + depth);
-
-    engine.onmessage = function(event){
-        let line = event.data;
-        if(line.startsWith("bestmove")){
-            let move = line.split(" ")[1];
-            console.log("Move recommandé:", move);
-
-            // Ici on peut calculer la solution complète plus tard
-            displayPuzzle(fen); // Affiche position sur l'échiquier
-            updateStatus("Puzzle généré par Stockfish !");
-        }
-    }
-    }
-/* -----------------------------
       Nouveau Puzzle
 -------------------------------*/
 document.getElementById('newPuzzle').addEventListener('click', () => {
     updateStatus("Génération du puzzle...");
     
-    // 🔹 Pour l'instant : puzzle de test
+    // 🔹 Exemple de FEN aléatoire pour test
     let sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
     let sampleSolution = ["e4e5","g8f6"];
-    
+
     // Stocker dans Firebase
-    let puzzleRef = db.ref('checkmateChallenge/currentPuzzle');
-    puzzleRef.set({
+    db.ref('checkmateChallenge/currentPuzzle').set({
         fen: sampleFen,
         solution: sampleSolution
     });
@@ -136,6 +114,17 @@ document.getElementById('newPuzzle').addEventListener('click', () => {
     displayPuzzle(sampleFen);
     updateStatus("Puzzle généré ! Joueurs prêts.");
 });
+
+/* -----------------------------
+      Écoute Firebase pour puzzle live
+-------------------------------*/
+db.ref('checkmateChallenge/currentPuzzle').on('value', (snapshot) => {
+    const data = snapshot.val();
+    if(data && data.fen){
+        displayPuzzle(data.fen);
+    }
+});
 </script>
+
 </body>
 </html>
