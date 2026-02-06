@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkmate Challenge</title>
-<!-- CSS Chessboard depuis CDN -->
+
+<!-- Chessboard.js CSS -->
 <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+
 <style>
     body {
         font-family: sans-serif;
@@ -37,11 +39,9 @@
 <div id="chessboard"></div>
 <button id="newPuzzle">Nouveau Puzzle</button>
 
-<!-- JS CDN -->
-<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+<!-- JS Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
-
-<!-- Firebase CDN -->
+<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
@@ -102,6 +102,5 @@ document.getElementById('newPuzzle').addEventListener('click', () => {
     displayPuzzle(sampleFen);
 });
 </script>
-
 </body>
 </html>
