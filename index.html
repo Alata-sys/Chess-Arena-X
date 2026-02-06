@@ -3,20 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Arena X - Chess Battle Run</title>
+<title>Chess Battle Run - Checkmate Challenge</title>
 <style>
     body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #fff7e6, #ffe066); /* Couleurs lumineuses */
         margin: 0;
-        font-family: sans-serif;
-        background-color: #f5f5f5;
+        padding: 0;
     }
     header {
-        background-color: #dbac16;
-        color: black;
+        background: linear-gradient(90deg, #ffd633, #ffb347); /* Jaune lumineux */
+        color: #1a1a1a;
+        padding: 25px;
         text-align: center;
-        padding: 20px;
-        font-size: 1.7em;
+        font-size: 2em;
         font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     main {
         display: flex;
@@ -25,93 +27,126 @@
         padding: 20px;
     }
     .game-card {
-        width: 90%;
-        max-width: 500px;
-        background-color: white;
-        border-radius: 10px;
-        border: 2px solid #dbac16;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        margin: 15px 0;
-        padding: 15px;
+        width: 95%;
+        max-width: 550px;
+        background-color: #ffffff;
+        border: 3px solid #ffdd57;
+        border-radius: 15px;
+        margin: 20px 0;
+        padding: 20px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         text-align: center;
+        transition: transform 0.3s;
+    }
+    .game-card:hover {
+        transform: scale(1.03);
     }
     .game-card h2 {
         margin-top: 0;
-        font-size: 1.3em;
+        color: #ff6f00;
     }
-    .players-online {
-        font-size: 0.95em;
-        color: #333;
-        margin: 8px 0;
+    .players, .spectators {
+        font-size: 1em;
+        margin: 10px 0;
+        color: #333333;
     }
     button {
-        background-color: #dbac16;
+        background-color: #ffcc33;
         border: none;
-        padding: 10px 25px;
-        border-radius: 5px;
-        cursor: pointer;
+        padding: 12px 25px;
+        border-radius: 8px;
         font-weight: bold;
-        margin-top: 10px;
-        font-size: 1em;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: background 0.3s;
     }
-    footer {
-        text-align: center;
-        padding: 15px;
-        font-size: 0.85em;
-        color: #555;
+    button:hover {
+        background-color: #ffb700;
+    }
+    /* 🔹 Lichess board container */
+    #lichessBoard {
+        width: 90%;
+        max-width: 600px;
+        height: 400px;
+        margin-top: 30px;
+        border: 3px solid #ffdd57;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 </style>
 </head>
 <body>
 
-<header>Chess Arena X<br>Chess Battle Run</header>
+<header>Chess Battle Run</header>
 
 <main>
     <div class="game-card" id="checkmateCard">
         <h2>🔥 Checkmate Challenge</h2>
-        <div class="players-online" id="checkmateOnline">0 joueurs en ligne</div>
-        <button onclick="openGame('checkmate.html')">Jouer</button>
+        <div class="players" id="playersList">Joueurs : ...</div>
+        <div class="spectators" id="spectatorsList">Spectateurs : ...</div>
+        <button onclick="joinGame()">Jouer</button>
     </div>
 
-    <div class="game-card" id="chessForestCard">
-        <h2>🌳 Chess Forest</h2>
-        <div class="players-online" id="chessForestOnline">0 joueurs en ligne</div>
-        <button onclick="openGame('chessForest.html')">Jouer</button>
-    </div>
-
-    <div class="game-card" id="ghostMasterCard">
-        <h2>👻 Ghost Master</h2>
-        <div class="players-online" id="ghostMasterOnline">0 joueurs en ligne</div>
-        <button onclick="openGame('ghostMaster.html')">Jouer</button>
-    </div>
-
-    <div class="game-card" id="detectiveCard">
-        <h2>🕵️ Detective</h2>
-        <div class="players-online" id="detectiveOnline">0 joueurs en ligne</div>
-        <button onclick="openGame('detective.html')">Jouer</button>
+    <!-- 🔹 Lichess live board -->
+    <div id="lichessBoard">
+        <iframe src="https://lichess.org/study/embed/demoGame1?theme=auto" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
     </div>
 </main>
 
-<footer>© 2026 Alata Elyse</footer>
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
 
 <script>
-    // 🔹 Fonction pour ouvrir un jeu
-    function openGame(url){
-        window.location.href = url;
-    }
-
-    // 🔹 Simulation des joueurs en ligne (tu remplaceras par Firebase plus tard)
-    const onlineCounts = {
-        checkmate: 3079,
-        chessForest: 1245,
-        ghostMaster: 986,
-        detective: 2031
+    // 🔹 Config Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3OUbb_upJjNfAIC-bSI4ix46Q79iZHyQ",
+      authDomain: "c-b-r-4e772.firebaseapp.com",
+      databaseURL: "https://c-b-r-4e772-default-rtdb.firebaseio.com",
+      projectId: "c-b-r-4e772",
+      storageBucket: "c-b-r-4e772.firebasestorage.app",
+      messagingSenderId: "213615144690",
+      appId: "1:213615144690:web:a0b06fa6b473527942ea6b",
+      measurementId: "G-GQ0VC2PYG0"
     };
 
-    document.getElementById("checkmateOnline").innerText = onlineCounts.checkmate + " joueurs en ligne";
-    document.getElementById("chessForestOnline").innerText = onlineCounts.chessForest + " joueurs en ligne";
-    document.getElementById("ghostMasterOnline").innerText = onlineCounts.ghostMaster + " joueurs en ligne";
-    document.getElementById("detectiveOnline").innerText = onlineCounts.detective + " joueurs en ligne";
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const db = firebase.database();
+
+    const gameId = "demoGame1"; // ID de la partie demo
+
+    // 🔹 Créer une partie test
+    function createDemoGame() {
+        db.ref("checkmateChallenge/games/" + gameId).set({
+            players: { white: "Alice", black: "Bob" },
+            puzzle: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", solution: ["e2e4","d7d5"] },
+            status: "playing",
+            spectators: ["Charlie", "Dana"]
+        });
+    }
+
+    // 🔹 Afficher la partie dans la carte
+    function displayGame() {
+        db.ref("checkmateChallenge/games/" + gameId).once("value", snapshot => {
+            const data = snapshot.val();
+            if(data){
+                document.getElementById("playersList").innerText = "Joueurs : " + data.players.white + " (⚪) vs " + data.players.black + " (⚫)";
+                document.getElementById("spectatorsList").innerText = "Spectateurs : " + data.spectators.join(", ");
+            }
+        });
+    }
+
+    // 🔹 Bouton rejoindre partie
+    function joinGame() {
+        alert("Vous avez rejoint la partie ! (démo)");
+        // Ici tu pourras ajouter la logique pour lier le joueur réel à Firebase
+    }
+
+    // 🔹 Initialisation
+    createDemoGame();
+    displayGame();
 </script>
 
 </body>
