@@ -64,6 +64,11 @@ async function startEngine() {
 
     statusEl.innerHTML = "Boot Engine...";
     
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log('Service Worker Registered'))
+    .catch(err => console.log(err));
+    }
     if (!TOKEN || TOKEN.length < 20) {
         loaderEl.style.display = 'none';
         TOKEN = prompt("🔑 CONFIGURATION CHESS BATTLE RUN\nColle ton Token Lichess ici :");
