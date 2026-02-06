@@ -1,15 +1,7 @@
-{
-  "name": "Chess Battle Run",
-  "short_name": "CBR",
-  "start_url": "/index.html",
-  "display": "standalone",
-  "background_color": "#161512",
-  "theme_color": "#dbac16",
-  "icons": [
-    {
-      "src": "/icon.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+"icons": [
+  {
+    "src": "/Chess-Arena-X/icon.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
