@@ -4,191 +4,114 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chess Arena X - Chess Battle Run</title>
-
-<!-- Style -->
 <style>
-body {
-    font-family: sans-serif;
-    background: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
-header {
-    text-align: center;
-    padding: 15px;
-    background: #dbac16;
-    color: black;
-    font-size: 1.8em;
-    font-weight: bold;
-}
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
-    gap: 20px;
-}
-.game-card {
-    width: 220px;
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.2s ease;
-}
-.game-card:hover {
-    transform: scale(1.05);
-}
-.game-card h2 {
-    margin: 10px 0 5px 0;
-}
-.game-card p {
-    margin: 5px 0;
-    font-size: 0.9em;
-    color: green;
-    font-weight: bold;
-}
-.game-card button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    font-weight: bold;
-    border: none;
-    background: #dbac16;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.board-preview {
-    width: 200px;
-    height: 200px;
-    background: #eee;
-    border: 2px solid #ccc;
-    margin-top: 10px;
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-}
-.board-preview div {
-    width: 100%;
-    height: 100%;
-}
-.white { background: #fff; }
-.black { background: #888; }
-footer {
-    text-align: center;
-    padding: 10px;
-    color: #555;
-    font-size: 0.8em;
-}
+    body {
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #f5f5f5;
+    }
+    header {
+        background-color: #dbac16;
+        color: black;
+        text-align: center;
+        padding: 20px;
+        font-size: 1.7em;
+        font-weight: bold;
+    }
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+    .game-card {
+        width: 90%;
+        max-width: 500px;
+        background-color: white;
+        border-radius: 10px;
+        border: 2px solid #dbac16;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin: 15px 0;
+        padding: 15px;
+        text-align: center;
+    }
+    .game-card h2 {
+        margin-top: 0;
+        font-size: 1.3em;
+    }
+    .players-online {
+        font-size: 0.95em;
+        color: #333;
+        margin: 8px 0;
+    }
+    button {
+        background-color: #dbac16;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+        font-size: 1em;
+    }
+    footer {
+        text-align: center;
+        padding: 15px;
+        font-size: 0.85em;
+        color: #555;
+    }
 </style>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-
 </head>
 <body>
 
-<header>Chess Arena X <br> Chess Battle Run</header>
+<header>Chess Arena X<br>Chess Battle Run</header>
 
-<div class="container">
-    <div class="game-card">
+<main>
+    <div class="game-card" id="checkmateCard">
         <h2>🔥 Checkmate Challenge</h2>
-        <p id="online-checkmate">0 joueurs en ligne</p>
-        <div class="board-preview" id="board-checkmate"></div>
-        <button onclick="joinGame('checkmate')">Jouer</button>
+        <div class="players-online" id="checkmateOnline">0 joueurs en ligne</div>
+        <button onclick="openGame('checkmate.html')">Jouer</button>
     </div>
-    <div class="game-card">
+
+    <div class="game-card" id="chessForestCard">
         <h2>🌳 Chess Forest</h2>
-        <p id="online-forest">0 joueurs en ligne</p>
-        <div class="board-preview" id="board-forest"></div>
-        <button onclick="joinGame('forest')">Jouer</button>
+        <div class="players-online" id="chessForestOnline">0 joueurs en ligne</div>
+        <button onclick="openGame('chessForest.html')">Jouer</button>
     </div>
-    <div class="game-card">
+
+    <div class="game-card" id="ghostMasterCard">
         <h2>👻 Ghost Master</h2>
-        <p id="online-ghost">0 joueurs en ligne</p>
-        <div class="board-preview" id="board-ghost"></div>
-        <button onclick="joinGame('ghost')">Jouer</button>
+        <div class="players-online" id="ghostMasterOnline">0 joueurs en ligne</div>
+        <button onclick="openGame('ghostMaster.html')">Jouer</button>
     </div>
-    <div class="game-card">
+
+    <div class="game-card" id="detectiveCard">
         <h2>🕵️ Detective</h2>
-        <p id="online-detective">0 joueurs en ligne</p>
-        <div class="board-preview" id="board-detective"></div>
-        <button onclick="joinGame('detective')">Jouer</button>
+        <div class="players-online" id="detectiveOnline">0 joueurs en ligne</div>
+        <button onclick="openGame('detective.html')">Jouer</button>
     </div>
-</div>
+</main>
 
 <footer>© 2026 Alata Elyse</footer>
 
 <script>
-// 🔹 Firebase config
-const firebaseConfig = {
-    apiKey: "TA_CLE",
-    authDomain: "c-b-r-4e772.firebaseapp.com",
-    databaseURL: "https://c-b-r-4e772-default-rtdb.firebaseio.com",
-    projectId: "c-b-r-4e772",
-    storageBucket: "c-b-r-4e772.appspot.com",
-    messagingSenderId: "XXXX",
-    appId: "XXXX"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-// 🔹 Fonction pour mettre à jour les joueurs en ligne
-function updateOnlinePlayers(game, elementId){
-    const ref = db.ref("rooms/" + game + "/players");
-    ref.on('value', snapshot => {
-        document.getElementById(elementId).innerText = snapshot.val() + " joueurs en ligne";
-    });
-}
-
-// 🔹 Initialiser tous les jeux
-updateOnlinePlayers('checkmate','online-checkmate');
-updateOnlinePlayers('forest','online-forest');
-updateOnlinePlayers('ghost','online-ghost');
-updateOnlinePlayers('detective','online-detective');
-
-// 🔹 Fonction pour rejoindre un jeu
-function joinGame(game){
-    alert("🚀 Tu rejoins le jeu: " + game);
-    // Ici plus tard tu rediriges vers la page du jeu correspondant
-}
-
-// 🔹 Création rapide d'un mini plateau d'échecs pour preview
-function drawBoard(boardId){
-    const board = document.getElementById(boardId);
-    for(let r=0;r<8;r++){
-        for(let c=0;c<8;c++){
-            const square = document.createElement('div');
-            square.className = (r+c)%2===0 ? 'white' : 'black';
-            board.appendChild(square);
-        }
+    // 🔹 Fonction pour ouvrir un jeu
+    function openGame(url){
+        window.location.href = url;
     }
-}
-drawBoard('board-checkmate');
-drawBoard('board-forest');
-drawBoard('board-ghost');
-drawBoard('board-detective');
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-<script>
-const firebaseConfig = {
-  apiKey: "TON_API_KEY",
-  authDomain: "c-b-r-4e772-default-rtdb.firebaseapp.com",
-  databaseURL: "https://c-b-r-4e772-default-rtdb.firebaseio.com",
-  projectId: "c-b-r-4e772",
-  storageBucket: "c-b-r-4e772.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
-};
+    // 🔹 Simulation des joueurs en ligne (tu remplaceras par Firebase plus tard)
+    const onlineCounts = {
+        checkmate: 3079,
+        chessForest: 1245,
+        ghostMaster: 986,
+        detective: 2031
+    };
 
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-</script>
+    document.getElementById("checkmateOnline").innerText = onlineCounts.checkmate + " joueurs en ligne";
+    document.getElementById("chessForestOnline").innerText = onlineCounts.chessForest + " joueurs en ligne";
+    document.getElementById("ghostMasterOnline").innerText = onlineCounts.ghostMaster + " joueurs en ligne";
+    document.getElementById("detectiveOnline").innerText = onlineCounts.detective + " joueurs en ligne";
 </script>
 
 </body>
