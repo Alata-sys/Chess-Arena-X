@@ -32,11 +32,14 @@
 
             status.innerText = "Connexion à Lichess...";
 
-            fetch('https://lichess.org', {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + TOKEN,
-                    'Accept': 'application/json'
+fetch('https://lichess.org', { 
+    method: 'GET',
+    headers: {
+        'Authorization': 'Bearer ' + TOKEN,
+        'Accept': 'application/json'
+    }
+})
+
                 }
             })
             .then(function(response) {
