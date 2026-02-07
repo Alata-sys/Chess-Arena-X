@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run - Index</title>
+<title>Chess Battle Run - Connexion</title>
 <style>
 /* ===== GLOBAL ===== */
 body {
@@ -11,7 +11,10 @@ body {
     font-family: Arial, sans-serif;
     background: #0f0f0f;
     color: white;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
 }
 
 /* ===== HEADER ===== */
@@ -23,10 +26,19 @@ header {
     background: #111;
     border-bottom: 1px solid #222;
 }
-.left-header { display: flex; align-items: center; gap: 12px; }
-.logo { font-size: 20px; font-weight: bold; color: #f0c420; }
 
-/* ===== MENU 3 POINTS ===== */
+.left-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f0c420;
+}
+
 .menu {
     width: 38px;
     height: 38px;
@@ -37,10 +49,11 @@ header {
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    transition: 0.3s;
 }
+
 .menu:hover { background: #555; }
 
-/* ===== PROFILE ICON ===== */
 .profile {
     width: 38px;
     height: 38px;
@@ -51,67 +64,69 @@ header {
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    transition: 0.3s;
 }
-.profile:hover { background: #555; }
 
-/* ===== PROFILE POPUP ===== */
-.profile-popup {
-    position: absolute;
-    top: 65px;
-    right: 20px;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 15px;
-    display: none;
-    width: 200px;
-    z-index: 9999;
-}
-.profile-popup h3 { margin: 0 0 10px 0; color: #f0c420; }
-.profile-popup button {
-    margin-top: 10px;
-    padding: 10px;
-    width: 100%;
-    background: #c62828;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-}
-.profile-popup button:hover { background: #e53935; }
+.profile:hover { background: #555; }
 
 /* ===== SPINNER ===== */
 .spinner {
-    margin: 50px auto;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #f0c420;
+    margin: auto;
+    border: 6px solid #222;
+    border-top: 6px solid #f0c420;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
 }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* ===== MENU DES JEUX ===== */
-.menu-container {
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #f0c420; }
+    50% { box-shadow: 0 0 15px #f0c420; }
+    100% { box-shadow: 0 0 5px #f0c420; }
+}
+
+/* ===== CONTAINER CENTRAL ===== */
+.main-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* ===== BOUTON LICHESS ===== */
+#lichessBtn {
     display: none;
-    margin-top: 30px;
-    text-align: center;
-}
-.game-button {
-    display: block;
-    margin: 10px auto;
-    padding: 15px 30px;
-    background: #dbac16;
-    color: black;
-    font-size: 18px;
+    padding: 20px 40px;
+    font-size: 24px;
+    font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    width: 250px;
-    transition: 0.2s;
+    background: linear-gradient(90deg, #f0c420, #ffec7f);
+    color: black;
+    box-shadow: 0 0 15px #f0c420;
+    transition: 0.5s all;
 }
-.game-button:hover { background: #f0c420; }
+
+#lichessBtn:hover {
+    box-shadow: 0 0 25px #f0c420, 0 0 45px #f0c420;
+    transform: scale(1.05);
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 15px;
+    color: #666;
+    font-size: 14px;
+}
 </style>
 </head>
 <body>
@@ -121,71 +136,116 @@ header {
         <div class="menu">⋮</div>
         <div class="logo">Chess Battle Run</div>
     </div>
-    <div class="profile" onclick="toggleProfile()">A</div>
+    <div class="profile">A</div>
 </header>
 
-<!-- PROFILE POPUP -->
-<div class="profile-popup" id="profilePopup">
-    <h3>Profil</h3>
-    <p id="username">Utilisateur</p>
-    <button onclick="logout()">Déconnexion</button>
+<div class="main-container">
+    <div class="spinner" id="spinner"></div>
+    <button id="lichessBtn" onclick="window.location.href='https://lichess.org/oauth?response_type=token&client_id=YOUR_CLIENT_ID&scope=board:play&redirect_uri=https://alata-sys.github.io/Chess-Arena-X/index.html'">
+        Se connecter avec Lichess
+    </button>
 </div>
 
-<!-- SPINNER / LOADING -->
-<p id="loadingText">Connexion en cours...</p>
-<div class="spinner" id="spinner"></div>
-
-<!-- MENU DES JEUX -->
-<div class="menu-container" id="menu">
-    <button class="game-button" onclick="location.href='checkmate.html'">Checkmate Challenge</button>
-    <button class="game-button" onclick="location.href='ChessForest.html'">Chess Forest</button>
-    <button class="game-button" onclick="location.href='gladiator.html'">Gladiator</button>
-    <button class="game-button" onclick="location.href='detective.html'">Detective</button>
-    <button class="game-button" onclick="location.href='ghost.html'">Ghost</button>
-</div>
+<footer>© 2026 C-B-R</footer>
 
 <script>
-// Toggle popup profil
-function toggleProfile(){
-    const popup = document.getElementById('profilePopup');
-    popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-}
-
-// Déconnexion
-function logout(){
-    localStorage.removeItem('lichessToken');
-    alert("Déconnecté !");
-    location.reload();
-}
-
-// Vérifie si token Lichess dans l'URL ou localStorage
-function checkOAuth() {
-    const hash = window.location.hash; // token renvoyé par lichess
-    if(hash.includes('access_token')) {
-        const params = new URLSearchParams(hash.substring(1));
-        const token = params.get('access_token');
-        localStorage.setItem('lichessToken', token);
-        history.replaceState(null, '', window.location.pathname); // enlève token de l'URL
-    }
-
-    const token = localStorage.getItem('lichessToken');
-    if(!token){
-        // Affiche bouton OAuth si pas connecté
-        document.getElementById('spinner').style.display = 'none';
-        document.getElementById('loadingText').innerHTML = `<a href="https://lichess.org/oauth?response_type=token&client_id=YOUR_CLIENT_ID&scope=board:play&redirect_uri=${encodeURIComponent(window.location.href)}" style="color:#f0c420; text-decoration:none; font-weight:bold;">Se connecter avec Lichess</a>`;
-    } else {
-        // Token présent, afficher menu après 1.5s
-        document.getElementById('loadingText').style.display = 'none';
-        setTimeout(() => {
-            document.getElementById('spinner').style.display = 'none';
-            document.getElementById('menu').style.display = 'block';
-        }, 1500);
-    }
-}
-
-// Initialisation
-checkOAuth();
+// Affiche le spinner pendant 2s puis montre le bouton
+setTimeout(() => {
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('lichessBtn').style.display = 'block';
+}, 2000);
 </script>
-<footer>© 2026 C-B-R</footer>🎊
-</body>✨
-</html>🎊
+
+</body>
+</html>￼Enter<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess Battle Run - Connexion</title>
+<style>
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f0f0f;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+}
+
+/* ===== HEADER ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+ckground: #111;
+    border-bottom: 1px solid #222;
+}
+
+.left-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f0c420;
+}
+
+.menu {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.menu:hover { background: #555; }
+
+.profile {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.profile:hover { background: #555; }
+
+/* ===== SPINNER ===== */
+.spinner {
+    margin: auto;
+    border: 6px solid #222;
+    border-top: 6px solid #f0c420;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #f0c420; }
+    50% { box-shadow: 0 0 15px #f0c420; }
+    100% { box-shadow: 0 0 5px #f0c420; }
+}
