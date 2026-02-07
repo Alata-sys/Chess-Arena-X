@@ -12,43 +12,41 @@
     body {
         font-family: Arial, sans-serif;
         text-align: center;
+        background: #f0f0f0;
+        margin: 0;
         padding: 20px;
-        background: #f8f8f8;
-        color: #333;
     }
 
     h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
-        display: inline-block;
-        border-bottom: 2px solid #000; /* Ligne noire sous le titre */
-        padding-bottom: 5px;
-    }
-
-    #status {
-        margin: 15px 0;
-        font-weight: bold;
+        color: #222;
+        margin-bottom: 20px;
     }
 
     #chessboard {
         width: 90vw;
         max-width: 480px;
-        margin: 20px auto;
+        margin: 0 auto 20px auto;
         border: 2px solid #333;
+        background-color: #eee;
+    }
+
+    #status {
+        font-weight: bold;
+        margin-bottom: 20px;
     }
 
     button {
         padding: 10px 20px;
         font-size: 16px;
-        cursor: pointer;
-        background: #dbac16;
-        border: none;
         border-radius: 5px;
-        transition: background 0.3s;
+        border: none;
+        background-color: #222;
+        color: #fff;
+        cursor: pointer;
     }
 
     button:hover {
-        background: #c99f14;
+        background-color: #555;
     }
 </style>
 </head>
@@ -57,72 +55,43 @@
 <h1>🔥 Checkmate Challenge</h1>
 <p id="status">En attente du puzzle...</p>
 
-<div id="chessboard" class="board-b72b1"></div>
-
+<div id="chessboard"></div>
 <button id="newPuzzle">Nouveau Puzzle</button>
 
-<!-- JS local -->
-<script src="js/chess.js"></script>
+<!-- JS locaux ou CDN -->
+<script src="js/chess.js"></script> <!-- ou lien CDN : https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js -->
 <script src="js/chessboard.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
 <script>
-/* -----------------------------
-      Firebase Setup
--------------------------------*/
-const firebaseConfig = {
-  apiKey: "AIzaSyD3OUbb_upJjNfAIC-bSI4ix46Q79iZHyQ",
-  authDomain: "c-b-r-4e772.firebaseapp.com",
-  databaseURL: "https://c-b-r-4e772-default-rtdb.firebaseio.com",
-  projectId: "c-b-r-4e772",
-  storageBucket: "c-b-r-4e772.appspot.com",
-  messagingSenderId: "213615144690",
-  appId: "1:213615144690:web:a0b06fa6b473527942ea6b",
-  measurementId: "G-GQ0VC2PYG0"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-/* -----------------------------
-      Chessboard & Chess.js
--------------------------------*/
-let game = new Chess();
-let board = Chessboard('chessboard', {
-    draggable: true,
-    position: 'start',
-    pieceTheme: 'img/chesspieces/wikipedia/{piece}.png',
-    onDrop: function(source, target){
-        let move = game.move({ from: source, to: target, promotion: 'q' });
-        if(move === null) return 'snapback';
-        document.getElementById('status').innerText = "Vous avez joué : " + move.san;
-    }
-});
-
-function displayPuzzle(fen){
-    game.load(fen);
-    board.position(fen);
-    document.getElementById('status').innerText = "Puzzle chargé ! Bonne chance !";
-}
-
-/* -----------------------------
-      Nouveau Puzzle
--------------------------------*/
-document.getElementById('newPuzzle').addEventListener('click', () => {
-    document.getElementById('status').innerText = "Génération du puzzle...";
-
-    // Exemple : puzzle statique pour tester
-    let sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
-    let sampleSolution = ["e4e5","g8f6"];
-
-    // Stocker dans Firebase
-    db.ref('checkmateChallenge/currentPuzzle').set({
-        fen: sampleFen,
-        solution: sampleSolution
+    // Init Chess.js et Chessboard.js
+    const game = new Chess();
+    const board = Chessboard('chessboard', {
+        draggable: true,
+        position: 'start',
+        pieceTheme: 'img/chesspieces/wikipedia/{piece}.png',
+        onDrop: (source, target) => {
+            const move = game.move({ from: source, to: target, promotion: 'q' });
+            if (move === null) return 'snapback';
+            document.getElementById('status').innerText = "Vous avez joué : " + move.san;
+        }
     });
 
-    displayPuzzle(sampleFen);
-});
+    // Fonction pour afficher un puzzle
+    function displayPuzzle(fen) {
+        game.load(fen);
+        board.position(fen);
+        document.getElementById('status').innerText = "Puzzle chargé ! Bonne chance !";
+    }
+
+    // Bouton nouveau puzzle
+    document.getElementById('newPuzzle').addEventListener('click', () => {
+        document.getElementById('status').innerText = "Génération du puzzle...";
+
+        // Exemple de puzzle
+        const sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
+        displayPuzzle(sampleFen);
+    });
 </script>
+
 </body>
 </html>
