@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run - Connexion</title>
+<title>Chess Battle Run</title>
 <style>
 /* ===== GLOBAL ===== */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f0f0f;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
     color: white;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    justify-content: space-between;
 }
 
 /* ===== HEADER ===== */
@@ -25,6 +24,7 @@ header {
     padding: 15px 20px;
     background: #111;
     border-bottom: 1px solid #222;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
 .left-header {
@@ -34,30 +34,15 @@ header {
 }
 
 .logo {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     color: #f0c420;
 }
 
-.menu {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    background: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    transition: 0.3s;
-}
-
-.menu:hover { background: #555; }
-
-.profile {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+.menu, .profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     background: #333;
     cursor: pointer;
     display: flex;
@@ -67,7 +52,7 @@ header {
     transition: 0.3s;
 }
 
-.profile:hover { background: #555; }
+.menu:hover, .profile:hover { background: #555; }
 
 /* ===== PROFILE POPUP ===== */
 .profile-popup {
@@ -76,14 +61,15 @@ header {
     right: 20px;
     background: #1a1a1a;
     border: 1px solid #333;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 15px;
     display: none;
-    width: 200px;
-    z-index: 9999;
+    width: 220px;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
 }
 
-.profile-popup h3 { margin: 0 0 10px 0; color: #f0c420; }
+.profile-popup h3 { margin: 0 0 10px; color: #f0c420; font-size: 18px; }
 .profile-popup button {
     margin-top: 10px;
     padding: 10px;
@@ -93,6 +79,7 @@ header {
     border-radius: 6px;
     color: white;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 .profile-popup button:hover { background: #e53935; }
@@ -104,6 +91,7 @@ header {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding: 40px 20px;
 }
 
 /* ===== SPINNER ===== */
@@ -113,7 +101,7 @@ header {
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
+    animation: spin 1s linear infinite;
     margin-bottom: 20px;
 }
 
@@ -122,65 +110,37 @@ header {
     100% { transform: rotate(360deg); }
 }
 
-@keyframes glow {
-    0% { box-shadow: 0 0 5px #f0c420; }
-    50% { box-shadow: 0 0 15px #f0c420; }
-    100% { box-shadow: 0 0 5px #f0c420; }
-}
-
-/* ===== LICHESS BUTTON ===== */
-#lichessBtn {
-    display: none;
-    padding: 20px 40px;
-    font-size: 24px;
-    font-weight: bold;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    background: linear-gradient(90deg, #f0c420, #ffec7f);
-    color: black;
-    box-shadow: 0 0 15px #f0c420;
-    transition: 0.5s all;
-}
-
-#lichessBtn:hover {
-    box-shadow: 0 0 25px #f0c420, 0 0 45px #f0c420;
-    transform: scale(1.05);
-}
-
-/* ===== MENU DES JEUX ===== */
+/* ===== GAME CARDS ===== */
 .container {
-    padding: 25px;
     display: none;
     flex-direction: column;
-    gap: 25px;
-    max-width: 520px;
-    margin: auto;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .game-card {
-    background: #181818;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
+    background: #1f1f1f;
+    border-radius: 15px;
     padding: 25px;
-    width: 420px;
-    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     position: relative;
     transition: 0.3s;
 }
 
 .game-card:hover {
-    border-color: #444;
-    transform: scale(1.02);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.8);
 }
 
 .badge {
     position: absolute;
-    top: -12px;
-    right: -12px;
+    top: -10px;
+    right: -10px;
     background: #ff9800;
     color: black;
-    padding: 6px 10px;
+    padding: 5px 10px;
     border-radius: 8px;
     font-size: 12px;
     font-weight: bold;
@@ -188,32 +148,34 @@ header {
 }
 
 @keyframes glowBadge {
-    0% { box-shadow: 0 0 5px #ff9800; }
-    50% { box-shadow: 0 0 18px #ff9800; }
-    100% { box-shadow: 0 0 5px #ff9800; }
+    0%,100% { box-shadow: 0 0 5px #ff9800; }
+    50% { box-shadow: 0 0 15px #ff9800; }
 }
 
-.game-title { font-size: 24px; margin-bottom: 10px; }
-.online { color: #4caf50; font-size: 14px; margin-bottom: 15px; }
+.game-title { font-size: 22px; margin-bottom: 8px; }
+.online { color: #4caf50; font-size: 14px; margin-bottom: 12px; }
 
 .play-btn {
-    background: #2e7d32;
+    background: linear-gradient(90deg, #2e7d32, #43a047);
     border: none;
-    padding: 12px 20px;
+    padding: 12px 25px;
     color: white;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
-.play-btn:hover { background: #43a047; }
+.play-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #43a047;
+}
 
 /* ===== FOOTER ===== */
 footer {
     text-align: center;
     padding: 15px;
-    color: #666;
+    color: #999;
     font-size: 14px;
 }
 </style>
@@ -236,17 +198,16 @@ footer {
     <button onclick="logout()">Déconnexion</button>
 </div>
 
-<!-- SPINNER + BOUTON OAUTH -->
+<!-- LOADER -->
 <div class="main-container">
     <div class="spinner" id="spinner"></div>
-    <button id="lichessBtn">Se connecter avec Lichess</button>
 </div>
 
-<!-- CONTAINER MENU -->
+<!-- MENU JEUX -->
 <div class="container" id="gameMenu"></div>
 
 <script>
-// Gestion profil
+// Toggle profil
 function toggleProfile(){
     const popup = document.getElementById("profilePopup");
     popup.style.display = popup.style.display === "block" ? "none" : "block";
@@ -254,29 +215,13 @@ function toggleProfile(){
 
 function logout(){
     alert("Déconnecté !");
-    location.reload();
 }
 
-// Gestion spinner + bouton OAuth
-const spinner = document.getElementById('spinner');
-const lichessBtn = document.getElementById('lichessBtn');
-const gameMenu = document.getElementById('gameMenu');
-
-lichessBtn.style.display = 'none';
-
+// Simulation du chargement, puis affichage du menu
 setTimeout(() => {
-    spinner.style.display = 'none';
-    lichessBtn.style.display = 'block';
-}, 2000);
-
-lichessBtn.onclick = () => {
-    window.location.href = "https://lichess.org/oauth?response_type=token&client_id=YOUR_CLIENT_ID&scope=board:play&redirect_uri=https://alata-sys.github.io/Chess-Arena-X/index.html";
-}
-
-// Crée et affiche le menu après OAuth
-function showGameMenu() {
-    document.querySelector('.main-container').style.display = 'none';
-    gameMenu.innerHTML = ''; // vide container
+    document.getElementById('spinner').style.display = 'none';
+    const container = document.getElementById('gameMenu');
+    container.style.display = 'flex';
 
     const games = [
         { title: "🔥 Checkmate Challenge", online: "● 3 079 joueurs en ligne", link: "checkmate.html", popular: true },
@@ -287,44 +232,35 @@ function showGameMenu() {
     ];
 
     games.forEach(game => {
-        const card = document.createElement("div");
-        card.className = "game-card";
-
+        const card = document.createElement('div');
+        card.className = 'game-card';
         if(game.popular){
-            const badge = document.createElement("div");
-            badge.className = "badge";
-            badge.textContent = "Populaire";
+            const badge = document.createElement('div');
+            badge.className = 'badge';
+            badge.textContent = 'Populaire';
             card.appendChild(badge);
         }
 
-        const title = document.createElement("div");
-        title.className = "game-title";
+        const title = document.createElement('div');
+        title.className = 'game-title';
         title.textContent = game.title;
         card.appendChild(title);
 
-        const online = document.createElement("div");
-        online.className = "online";
+        const online = document.createElement('div');
+        online.className = 'online';
         online.textContent = game.online;
         card.appendChild(online);
 
-        const btn = document.createElement("button");
-        btn.className = "play-btn";
-        btn.textContent = "Jouer";
-        btn.onclick = () => { window.location.href = game.link; };
+        const btn = document.createElement('button');
+        btn.className = 'play-btn';
+        btn.textContent = 'Jouer';
+        btn.onclick = () => window.location.href = game.link;
         card.appendChild(btn);
 
-        gameMenu.appendChild(card);
+        container.appendChild(card);
     });
 
-    gameMenu.style.display = 'flex';
-    gameMenu.style.flexDirection = 'column';
-    gameMenu.style.gap = '25px';
-}
-
-// Affiche le menu si token OAuth présent dans l’URL
-if(window.location.hash.includes('access_token')){
-    showGameMenu();
-}
+}, 2000);
 </script>
 
 <footer>© 2026 C-B-R</footer>
