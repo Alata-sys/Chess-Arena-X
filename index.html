@@ -177,6 +177,14 @@ footer {
     color: #666;
     font-size: 14px;
 }
+    .container {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;       /* espace identique */
+    max-width: 520px;
+    margin: auto;
+    }
 </style>
 </head>
 
@@ -221,7 +229,17 @@ footer {
     <div class="online">● 1 245 joueurs en ligne</div>
     <button class="play-btn" onclick="startForest()">Jouer</button>
 </div>
+<div class="container">
 
+    <div class="game-card">
+        ...
+    </div>
+
+    <div class="game-card">
+        ...
+    </div>
+
+</div>
 <footer>
 © 2026 C-B-R
 </footer>
