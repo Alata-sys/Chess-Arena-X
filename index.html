@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run - Login</title>
+<title>Chess Battle Run - Menu</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -14,19 +14,9 @@ body {
     padding: 50px;
 }
 h1 { color: #f0c420; }
-#profile { margin-top: 20px; display: none; }
-#profile img { width: 80px; border-radius: 50%; }
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: red;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
+
+/* Spinner */
 .spinner {
-    display: none;
     margin: 50px auto;
     border: 5px solid #f3f3f3;
     border-top: 5px solid #f0c420;
@@ -39,67 +29,48 @@ button {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Menu Jeux */
+.menu-container {
+    display: none; /* sera affiché après "chargement" */
+    margin-top: 30px;
+}
+.game-button {
+    display: block;
+    margin: 10px auto;
+    padding: 15px 30px;
+    background: #dbac16;
+    color: black;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 250px;
+    transition: 0.2s;
+}
+.game-button:hover { background: #f0c420; }
 </style>
 </head>
 <body>
 
-<h1>Chess Battle Run</h1>
-<p>Connexion via Lichess...</p>
+<h1>🔥 Chess Battle Run</h1>
+<p>Chargement du menu des jeux...</p>
 <div class="spinner" id="spinner"></div>
 
-<div id="profile">
-    <img id="avatar" src="" alt="Avatar">
-    <h2 id="username"></h2>
-    <button id="logout">Déconnexion</button>
+<div class="menu-container" id="menu">
+    <button class="game-button" onclick="location.href='checkmate.html'">Checkmate Challenge</button>
+    <button class="game-button" onclick="location.href='ChessForest.html'">Chess Forest</button>
+    <button class="game-button" onclick="location.href='gladiator.html'">Gladiator</button>
+    <button class="game-button" onclick="location.href='detective.html'">Detective</button>
+    <button class="game-button" onclick="location.href='ghost.html'">Ghost</button>
 </div>
 
 <script>
-// -------- CONFIG --------
-const clientId = "YOUR_CLIENT_ID"; // à mettre si tu as un vrai client_id
-const redirectUri = "https://alata-sys.github.io/Chess-Arena-X/index.html";
-const scope = "email:read profile:read";
-
-// -------- UTILS --------
-function getQueryParam(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
-
-// -------- OAUTH FLOW --------
-const code = getQueryParam("code");
-if (!code) {
-    // pas de code => redirection OAuth
-    const authUrl = `https://lichess.org/oauth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
-    window.location.href = authUrl;
-} else {
-    // code présent => afficher spinner et récupérer le token
-    document.getElementById("spinner").style.display = "block";
-
-    // Ici normalement tu échangerais le code contre un token côté serveur.
-    // Pour simplifier (et car Lichess permet parfois un token perso), on simule la récupération du profil
-    setTimeout(() => {
-        document.getElementById("spinner").style.display = "none";
-        // Exemple de profil
-        const profile = {
-            username: "iQO0",
-            avatar: "https://lichess1.org/assets/images/avatar-default.png"
-        };
-        document.getElementById("username").innerText = profile.username;
-        document.getElementById("avatar").src = profile.avatar;
-        document.getElementById("profile").style.display = "block";
-
-        // redirection automatique vers menu des jeux après 2s
-        setTimeout(() => {
-            window.location.href = "menu.html"; // mettre le chemin vers ton menu des jeux
-        }, 2000);
-    }, 1500);
-}
-
-// -------- DECONNEXION --------
-document.getElementById("logout").addEventListener("click", () => {
-    // simplement reload sans code pour "déconnecter"
-    window.location.href = redirectUri;
-});
+// Affiche le spinner pendant 1.5s puis le menu
+setTimeout(() => {
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('menu').style.display = 'block';
+}, 1500);
 </script>
 </body>
 </html>
