@@ -1,53 +1,45 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Chessboard Test</title>
+<title>Test Chessboard</title>
 
-<!-- CSS Chessboard.js -->
+<!-- Chessboard.js CSS -->
 <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
 
 <style>
-  body {
-    background: #0f0f0f;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding-top: 50px;
-  }
-  #liveChessboard {
-    width: 320px;
-    margin: auto;
-  }
+    body { font-family: sans-serif; text-align: center; padding: 20px; background: #f0f0f0; }
+    #board { width: 400px; margin: 20px auto; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 20px; cursor: pointer; }
 </style>
 </head>
 <body>
 
-<h2>Échiquier Live Test</h2>
-<div id="liveChessboard"></div>
+<h1>Test Chessboard.js</h1>
+<div id="board"></div>
+<button id="resetBtn">Réinitialiser</button>
 
-<!-- JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
+<!-- JS Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 
 <script>
-  // Crée le jeu
-  const liveGame = new Chess();
-
-  // Crée l'échiquier
-  const liveBoard = Chessboard('liveChessboard', {
+const game = new Chess();
+const board = Chessboard('board', {
+    draggable: true,
     position: 'start',
-    draggable: false,
-    showNotation: true
-  });
+    pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/img/chesspieces/wikipedia/{piece}.png',
+    onDrop: (source, target) => {
+        const move = game.move({ from: source, to: target, promotion: 'q' });
+        if (move === null) return 'snapback';
+    }
+});
 
-  // Test : mettre à jour l'échiquier après 2s
-  setTimeout(() => {
-    const testFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-    liveGame.load(testFen);
-    liveBoard.position(testFen);
-  }, 2000);
+document.getElementById('resetBtn').addEventListener('click', () => {
+    game.reset();
+    board.start();
+});
 </script>
 
 </body>
