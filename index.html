@@ -250,6 +250,37 @@ function startGhost(){ window.location.href = "ghost.html"; }
 function startForest(){ window.location.href = "ChessForest.html"; }
 function startDetective(){ window.location.href = "detective.html"; }
 </script>
+<!-- LIVE CHESSBOARD -->
+<div id="liveChessboard" style="width: 400px; margin: 40px auto;"></div>
 
+<!-- Scripts pour échiquier live -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
+<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+
+<script>
+  // Initialise le jeu
+  const liveGame = new Chess();
+
+  // Initialise l'échiquier
+  const liveBoard = Chessboard('liveChessboard', {
+    position: 'start',   // position initiale
+    draggable: false,    // pas de déplacement pour le live
+    showNotation: true   // montre les lettres/nombres comme Lichess
+  });
+
+  // Exemple : mettre à jour la position avec un FEN
+  function updateLiveBoard(fen) {
+    liveGame.load(fen);
+    liveBoard.position(fen);
+  }
+
+  // Exemple de test : position après quelques coups
+  setTimeout(() => {
+    updateLiveBoard('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2');
+  }, 2000);
+
+  // 🔹 Plus tard : tu pourras récupérer les positions des joueurs depuis Firebase et faire updateLiveBoard(fen)
+</script>
 </body>
 </html>
