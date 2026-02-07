@@ -3,83 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test Chessboard</title>
+<title>Live Chessboard Test</title>
 
-<!-- Chessboard.js CSS depuis CDN -->
+<!-- CSS Chessboard.js -->
 <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
 
 <style>
-    body {
-        font-family: sans-serif;
-        text-align: center;
-        padding: 10px;
-        background: #f0f0f0;
-    }
-    h1 { color: #dbac16; }
-    #chessboard {
-        width: 90vw;
-        max-width: 480px;
-        margin: 10px auto;
-        border: 2px solid #333;
-    }
-    #status {
-        margin: 10px 0;
-        font-weight: bold;
-    }
+  body {
+    background: #0f0f0f;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 50px;
+  }
+  #liveChessboard {
+    width: 320px;
+    margin: auto;
+  }
 </style>
 </head>
 <body>
 
-<h1>Test Chessboard.js</h1>
-<p id="status">En attente de vérification des fichiers...</p>
-<div id="chessboard"></div>
+<h2>Échiquier Live Test</h2>
+<div id="liveChessboard"></div>
 
-<!-- JS Libraries depuis CDN -->
+<!-- JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
 <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 
 <script>
-window.addEventListener('load', () => {
-    const statusEl = document.getElementById('status');
-    
-    // Vérifier CSS (div doit avoir largeur et hauteur)
-    const chessDiv = document.getElementById('chessboard');
-    const style = window.getComputedStyle(chessDiv);
-    console.log("CSS Test -> Width:", style.width, "Height:", style.height, "Border:", style.border);
+  // Crée le jeu
+  const liveGame = new Chess();
 
-    // Vérifier Chess.js
-    if(typeof Chess !== "undefined"){
-        console.log("Chess.js chargé ✅");
-    } else {
-        console.log("Chess.js NON chargé ❌");
-        statusEl.innerText = "Erreur : Chess.js non chargé !";
-        return;
-    }
+  // Crée l'échiquier
+  const liveBoard = Chessboard('liveChessboard', {
+    position: 'start',
+    draggable: false,
+    showNotation: true
+  });
 
-    // Vérifier Chessboard.js
-    if(typeof Chessboard !== "undefined"){
-        console.log("Chessboard.js chargé ✅");
-    } else {
-        console.log("Chessboard.js NON chargé ❌");
-        statusEl.innerText = "Erreur : Chessboard.js non chargé !";
-        return;
-    }
-
-    // Initialiser l'échiquier
-    let game = new Chess();
-    let board = Chessboard('chessboard', {
-        draggable: true,
-        position: 'start',
-        pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/img/chesspieces/wikipedia/{piece}.png',
-        onDrop: function(source, target, piece, newPos, oldPos, orientation){
-            let move = game.move({ from: source, to: target, promotion: 'q' });
-            if(move === null) return 'snapback';
-            statusEl.innerText = "Vous avez joué : " + move.san;
-        }
-    });
-
-    statusEl.innerText = "Échiquier chargé ! Vous pouvez déplacer les pièces.";
-});
+  // Test : mettre à jour l'échiquier après 2s
+  setTimeout(() => {
+    const testFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    liveGame.load(testFen);
+    liveBoard.position(testFen);
+  }, 2000);
 </script>
 
 </body>
