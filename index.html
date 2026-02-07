@@ -215,6 +215,13 @@ footer {
         <div class="online">● 3 079 joueurs en ligne</div>
         <button class="play-btn" onclick="startGame()">Jouer</button>
     </div>
+    <!-- 4 PLAYER CARD -->
+<div class="game-card">
+    <div class="badge">Populaire</div>
+    <div class="game-title">1 contre 3(4joueurs)</div>
+    <div class="online">● 1 568 joueurs en ligne</div>
+    <button class="play-btn" onclick="startArena()">Jouer</button>
+</div>
     <!-- GHOST MASTER CARD -->
 <div class="game-card">
     <div class="game-title">👻 Ghost Master</div>
@@ -240,6 +247,12 @@ footer {
     </div>
 
 </div>
+    <!-- DETECTIVE CARD -->
+<div class="game-card">
+    <div class="game-title">🕵️ Detective</div>
+    <div class="online">● 2 031 joueurs en ligne</div>
+    <button class="play-btn" onclick="startDetective()">Jouer</button>
+</div>
 <footer>
 © 2026 C-B-R
 </footer>
@@ -258,6 +271,12 @@ function startGame(){
     }
     function startGhost(){
     window.location.href = "ghost.html";
+    }
+    function startDetective(){
+    window.location.href = "detective.html";
+    }
+    function startArena(){
+    window.location.href = "uncontretrois.html";
     }
 </script>
 
