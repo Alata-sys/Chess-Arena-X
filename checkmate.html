@@ -23,11 +23,9 @@
     }
 
     #chessboard {
-        width: 90vw;
-        max-width: 480px;
+        width: 480px;
         margin: 0 auto 20px auto;
         border: 2px solid #333;
-        background-color: #eee;
     }
 
     #status {
@@ -55,20 +53,20 @@
 <h1>🔥 Checkmate Challenge</h1>
 <p id="status">En attente du puzzle...</p>
 
-<div id="chessboard"></div>
+<div id="chessboard" style="width: 480px;"></div>
 <button id="newPuzzle">Nouveau Puzzle</button>
 
-<!-- JS locaux ou CDN -->
-<script src="js/chess.js"></script> <!-- ou lien CDN : https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js -->
+<!-- JS locaux -->
+<script src="js/chess.js"></script>
 <script src="js/chessboard.js"></script>
 
 <script>
-    // Init Chess.js et Chessboard.js
+    // Initialisation
     const game = new Chess();
     const board = Chessboard('chessboard', {
         draggable: true,
         position: 'start',
-        pieceTheme: 'img/chesspieces/wikipedia/{piece}.png',
+        pieceTheme: 'img/chesspieces/wikipedia/{piece}.png', // Vérifie que les images existent ici
         onDrop: (source, target) => {
             const move = game.move({ from: source, to: target, promotion: 'q' });
             if (move === null) return 'snapback';
@@ -76,22 +74,18 @@
         }
     });
 
-    // Fonction pour afficher un puzzle
+    // Test puzzle simple
     function displayPuzzle(fen) {
         game.load(fen);
         board.position(fen);
-        document.getElementById('status').innerText = "Puzzle chargé ! Bonne chance !";
+        document.getElementById('status').innerText = "Puzzle chargé !";
     }
 
-    // Bouton nouveau puzzle
     document.getElementById('newPuzzle').addEventListener('click', () => {
-        document.getElementById('status').innerText = "Génération du puzzle...";
-
-        // Exemple de puzzle
         const sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
         displayPuzzle(sampleFen);
     });
 </script>
 
 </body>
-</html>
+</html>Enter
