@@ -99,34 +99,40 @@ header {
 
 /* ===== MAIN CONTAINER ===== */
 .main-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+<!-- SPINNER + BOUTON OAUTH -->
+<div class="main-container">
+    <div class="spinner" id="spinner"></div>
+    <button id="lichessBtn">Se connecter avec Lichess</button>
+</div>
+
+<script>
+// Affiche le bouton OAuth après 2 secondes
+const spinner = document.getElementById('spinner');
+const lichessBtn = document.getElementById('lichessBtn');
+
+lichessBtn.style.display = 'none';
+
+setTimeout(() => {
+    spinner.style.display = 'none';
+    lichessBtn.style.display = 'block';
+}, 2000);
+
+// Redirection vers OAuth Lichess
+lichessBtn.onclick = () => {
+    // Remplace YOUR_CLIENT_ID par ton client_id réel
+    window.location.href = "https://lichess.org/oauth?response_type=token&client_id=YOUR_CLIENT_ID&scope=board:play&redirect_uri=https://alata-sys.github.io/Chess-Arena-X/index.html";
+};
+
+// Vérifie si le token est dans l'URL après OAuth
+function showGameMenu() {
+    document.querySelector('.main-container').style.display = 'none';
+    document.getElementById('gameMenu').style.display = 'flex';
 }
 
-/* ===== SPINNER ===== */
-.spinner {
-    border: 6px solid #222;
-    border-top: 6px solid #f0c420;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
-    margin-bottom: 20px;
+if (window.location.hash.includes('access_token')) {
+    showGameMenu();
 }
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes glow {
-    0% { box-shadow: 0 0 5px #f0c420; }
-    50% { box-shadow: 0 0 15px #f0c420; }
-    100% { box-shadow: 0 0 5px #f0c420; }
-}
+</script>
 
 /* ===== LICHESS BUTTON ===== */
 #lichessBtn {
