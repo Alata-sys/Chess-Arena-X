@@ -5,46 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkmate Challenge</title>
 
-<!-- CSS local -->
-<link rel="stylesheet" href="css/chessboard-1.0.0.css">
+<!-- Chessboard.js CSS -->
+<link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
 
 <style>
     body {
-        font-family: Arial, sans-serif;
+        font-family: sans-serif;
         text-align: center;
-        background: #f0f0f0;
-        margin: 0;
         padding: 20px;
+        background: #f0f0f0;
     }
-
     h1 {
-        color: #222;
-        margin-bottom: 20px;
+        color: #dbac16;
+        margin-bottom: 15px;
     }
-
     #chessboard {
-        width: 480px;
-        margin: 0 auto 20px auto;
+        width: 90vw;
+        max-width: 480px;
+        margin: 20px auto;
         border: 2px solid #333;
     }
-
     #status {
+        margin: 15px 0;
         font-weight: bold;
-        margin-bottom: 20px;
     }
-
     button {
         padding: 10px 20px;
         font-size: 16px;
-        border-radius: 5px;
-        border: none;
-        background-color: #222;
-        color: #fff;
         cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #555;
+        background: #dbac16;
+        border: none;
+        border-radius: 5px;
     }
 </style>
 </head>
@@ -52,21 +43,22 @@
 
 <h1>🔥 Checkmate Challenge</h1>
 <p id="status">En attente du puzzle...</p>
-
-<div id="chessboard" style="width: 480px;"></div>
+<div id="chessboard"></div>
 <button id="newPuzzle">Nouveau Puzzle</button>
 
-<!-- JS locaux -->
-<script src="js/chess.js"></script>
-<script src="js/chessboard.js"></script>
+<!-- JS Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 
 <script>
-    // Initialisation
+    // Initialiser le jeu
     const game = new Chess();
+
+    // Créer l'échiquier
     const board = Chessboard('chessboard', {
         draggable: true,
         position: 'start',
-        pieceTheme: 'img/chesspieces/wikipedia/{piece}.png', // Vérifie que les images existent ici
+        pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/img/chesspieces/wikipedia/{piece}.png',
         onDrop: (source, target) => {
             const move = game.move({ from: source, to: target, promotion: 'q' });
             if (move === null) return 'snapback';
@@ -74,18 +66,23 @@
         }
     });
 
-    // Test puzzle simple
-    function displayPuzzle(fen) {
+    // Fonction pour charger un puzzle
+    function loadPuzzle(fen) {
         game.load(fen);
         board.position(fen);
-        document.getElementById('status').innerText = "Puzzle chargé !";
+        document.getElementById('status').innerText = "Puzzle chargé ! Bonne chance !";
     }
 
-    document.getElementById('newPuzzle').addEventListener('click', () => {
-        const sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
-        displayPuzzle(sampleFen);
-    });
-</script>
+    // Puzzle test
+    const sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
 
+    // Bouton "Nouveau Puzzle"
+    document.getElementById('newPuzzle').addEventListener('click', () => {
+        loadPuzzle(sampleFen);
+    });
+
+    // Charger puzzle au démarrage
+    loadPuzzle(sampleFen);
+</script>
 </body>
-</html>Enter
+</html>
