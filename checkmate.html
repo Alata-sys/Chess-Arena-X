@@ -5,71 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkmate Challenge</title>
 
-<!-- Chessboard.js CSS -->
-<link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+<!-- CSS local -->
+<link rel="stylesheet" href="css/chessboard-1.0.0.css">
 
 <style>
-    /* Body & page générale */
     body {
         font-family: Arial, sans-serif;
         text-align: center;
         padding: 20px;
-        background: #f0f0f0;
-        color: #222;
+        background: #f8f8f8;
+        color: #333;
     }
 
     h1 {
-        color: #333;
-        margin-bottom: 20px;
         font-size: 32px;
+        margin-bottom: 10px;
+        display: inline-block;
+        border-bottom: 2px solid #000; /* Ligne noire sous le titre */
+        padding-bottom: 5px;
     }
 
     #status {
-        margin: 10px 0;
+        margin: 15px 0;
         font-weight: bold;
-        font-size: 18px;
     }
 
-    /* Plateau */
     #chessboard {
         width: 90vw;
         max-width: 480px;
         margin: 20px auto;
-        border: 2px solid #444;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        border: 2px solid #333;
     }
 
-    /* Boutons */
     button {
-        padding: 12px 25px;
+        padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        background: #444;
-        color: #fff;
+        background: #dbac16;
         border: none;
         border-radius: 5px;
-        margin-top: 15px;
-        transition: all 0.2s ease;
+        transition: background 0.3s;
     }
 
     button:hover {
-        background: #666;
+        background: #c99f14;
     }
-<h1 style="border-bottom: 2px solid #000; display: inline-block; padding-bottom: 5px;">
-  ♔ Checkmate Challenge ♕
-</h1>
 </style>
 </head>
 <body>
 
-<h1>♔ Checkmate Challenge ♕</h1>
+<h1>🔥 Checkmate Challenge</h1>
 <p id="status">En attente du puzzle...</p>
-<div id="chessboard"></div>
+
+<div id="chessboard" class="board-b72b1"></div>
+
 <button id="newPuzzle">Nouveau Puzzle</button>
 
-<!-- JS Libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
-<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+<!-- JS local -->
+<script src="js/chess.js"></script>
+<script src="js/chessboard.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
@@ -97,8 +91,8 @@ let game = new Chess();
 let board = Chessboard('chessboard', {
     draggable: true,
     position: 'start',
-    pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/img/chesspieces/wikipedia/{piece}.png',
-    onDrop: function(source, target, piece, newPos, oldPos, orientation){
+    pieceTheme: 'img/chesspieces/wikipedia/{piece}.png',
+    onDrop: function(source, target){
         let move = game.move({ from: source, to: target, promotion: 'q' });
         if(move === null) return 'snapback';
         document.getElementById('status').innerText = "Vous avez joué : " + move.san;
@@ -117,7 +111,7 @@ function displayPuzzle(fen){
 document.getElementById('newPuzzle').addEventListener('click', () => {
     document.getElementById('status').innerText = "Génération du puzzle...";
 
-    // Exemple : puzzle statique pour test
+    // Exemple : puzzle statique pour tester
     let sampleFen = "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3";
     let sampleSolution = ["e4e5","g8f6"];
 
