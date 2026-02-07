@@ -3,102 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Battle Run</title>
-
+<title>Chess Battle Run - Login</title>
 <style>
-body { margin:0; font-family:Arial,sans-serif; background:#0f0f0f; color:white; }
-header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background:#111; border-bottom:1px solid #222; }
-.left-header { display:flex; align-items:center; gap:12px; }
-.logo { font-size:20px; font-weight:bold; color:#f0c420; }
-
-.profile { width:38px; height:38px; border-radius:50%; background:#333; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; position:relative; }
-.profile:hover { background:#555; }
-.profile-menu { display:none; position:absolute; top:45px; right:0; background:#222; border:1px solid #444; border-radius:5px; padding:10px; min-width:120px; z-index:10; }
-.profile-menu button { width:100%; padding:8px; border:none; background:#ff4444; color:#fff; border-radius:3px; cursor:pointer; }
-
-#welcome { display:none; font-size:24px; text-align:center; margin-top:20px; }
-#loader { display:none; margin:30px auto; width:50px; height:50px; border:5px solid #444; border-top:5px solid #f0c420; border-radius:50%; animation:spin 1s linear infinite; }
-@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
-
-#menu { display:none; text-align:center; margin-top:40px; }
-.menu-btn { display:block; margin:15px auto; padding:12px 25px; font-size:18px; border:none; border-radius:5px; cursor:pointer; width:220px; background:#f0c420; color:#111; }
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #0f0f0f;
+    color: white;
+    margin: 0;
+    padding: 50px;
+}
+h1 { color: #f0c420; }
+#profile { margin-top: 20px; display: none; }
+#profile img { width: 80px; border-radius: 50%; }
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+.spinner {
+    display: none;
+    margin: 50px auto;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #f0c420;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 </head>
 <body>
 
-<header>
-    <div class="left-header"><div class="logo">CBR</div></div>
-    <div class="right-header">
-        <div class="profile" id="profileIcon">P
-            <div class="profile-menu" id="profileMenu">
-                <button id="logoutBtn">Se déconnecter</button>
-            </div>
-        </div>
-    </div>
-</header>
+<h1>Chess Battle Run</h1>
+<p>Connexion via Lichess...</p>
+<div class="spinner" id="spinner"></div>
 
-<div id="welcome"></div>
-<div id="loader"></div>
-
-<div id="menu">
-    <h2>Menu des jeux</h2>
-    <button class="menu-btn">Checkmate Challenge</button>
-    <button class="menu-btn">Chess Forest</button>
-    <button class="menu-btn">Gladiator</button>
+<div id="profile">
+    <img id="avatar" src="" alt="Avatar">
+    <h2 id="username"></h2>
+    <button id="logout">Déconnexion</button>
 </div>
 
 <script>
-const clientId = "YOUR_CLIENT_ID";
-const redirectUri = window.location.origin + window.location.pathname;
+// -------- CONFIG --------
+const clientId = "YOUR_CLIENT_ID"; // à mettre si tu as un vrai client_id
+const redirectUri = "https://alata-sys.github.io/Chess-Arena-X/index.html";
+const scope = "email:read profile:read";
 
-// ===== PROFIL MENU =====
-const profileIcon = document.getElementById("profileIcon");
-const profileMenu = document.getElementById("profileMenu");
-profileIcon.addEventListener("click", () => {
-    profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
-});
-document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("lichess_token"); // vider le token
+// -------- UTILS --------
+function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+// -------- OAUTH FLOW --------
+const code = getQueryParam("code");
+if (!code) {
+    // pas de code => redirection OAuth
+    const authUrl = `https://lichess.org/oauth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
+    window.location.href = authUrl;
+} else {
+    // code présent => afficher spinner et récupérer le token
+    document.getElementById("spinner").style.display = "block";
+
+    // Ici normalement tu échangerais le code contre un token côté serveur.
+    // Pour simplifier (et car Lichess permet parfois un token perso), on simule la récupération du profil
+    setTimeout(() => {
+        document.getElementById("spinner").style.display = "none";
+        // Exemple de profil
+        const profile = {
+            username: "iQO0",
+            avatar: "https://lichess1.org/assets/images/avatar-default.png"
+        };
+        document.getElementById("username").innerText = profile.username;
+        document.getElementById("avatar").src = profile.avatar;
+        document.getElementById("profile").style.display = "block";
+
+        // redirection automatique vers menu des jeux après 2s
+        setTimeout(() => {
+            window.location.href = "menu.html"; // mettre le chemin vers ton menu des jeux
+        }, 2000);
+    }, 1500);
+}
+
+// -------- DECONNEXION --------
+document.getElementById("logout").addEventListener("click", () => {
+    // simplement reload sans code pour "déconnecter"
     window.location.href = redirectUri;
 });
-
-// ===== RECUP TOKEN =====
-function getTokenFromUrl() {
-    const hash = window.location.hash;
-    if(hash){
-        const params = new URLSearchParams(hash.slice(1));
-        return params.get("access_token");
-    }
-    return null;
-}
-
-let token = localStorage.getItem("lichess_token") || getTokenFromUrl();
-if(getTokenFromUrl()) {
-    // garder le token en local pour ne pas le perdre au reload
-    localStorage.setItem("lichess_token", token);
-    // enlever le hash pour URL propre
-    history.replaceState(null, null, redirectUri);
-}
-
-// ===== REDIRECTION AUTOMATIQUE SI NON CONNECTÉ =====
-if(!token){
-    window.location.href = `https://lichess.org/oauth?response_type=token&client_id=${clientId}&scope=board:play&redirect_uri=${redirectUri}`;
-} else {
-    // afficher bienvenue + loader
-    const welcomeDiv = document.getElementById("welcome");
-    const loader = document.getElementById("loader");
-    const menu = document.getElementById("menu");
-
-    welcomeDiv.innerText = "Bienvenue, joueur Lichess !";
-    welcomeDiv.style.display = "block";
-
-    loader.style.display = "block";
-    setTimeout(() => {
-        loader.style.display = "none";
-        menu.style.display = "block";
-    }, 2000);
-}
 </script>
-
 </body>
 </html>
