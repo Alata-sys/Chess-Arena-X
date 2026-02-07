@@ -247,35 +247,59 @@ footer {
     <button id="lichessBtn">Se connecter avec Lichess</button>
 </div>
 
-<div class="container" id="gameMenu">
-    <div class="game-card">
-        <div class="badge">Populaire</div>
-        <div class="game-title">🔥 Checkmate Challenge</div>
-        <div class="online">● 3 079 joueurs en ligne</div>
-        <button class="play-btn" onclick="startGame()">Jouer</button>
-    </div>
-    <div class="game-card">
-        <div class="badge">Populaire</div>
-        <div class="game-title">1 contre 3 (4 joueurs)</div>
-        <div class="online">● 1 568 joueurs en ligne</div>
-        <button class="play-btn" onclick="startArena()">Jouer</button>
-    </div>
-    <div class="game-card">
-        <div class="game-title">👻 Ghost Master</div>
-        <div class="online">● 986 joueurs en ligne</div>
-        <button class="play-btn" onclick="startGhost()">Jouer</button>
-    </div>
-    <div class="game-card">
-        <div class="game-title">🌳 Chess Forest</div>
-        <div class="online">● 1 245 joueurs en ligne</div>
-        <button class="play-btn" onclick="startForest()">Jouer</button>
-    </div>
-    <div class="game-card">
-        <div class="game-title">🕵️ Detective</div>
-        <div class="online">● 2 031 joueurs en ligne</div>
-        <button class="play-btn" onclick="startDetective()">Jouer</button>
-    </div>
-</div>
+<script>
+// Transforme le menu texte en cartes interactives
+document.addEventListener("DOMContentLoaded", () => {
+    const gameTexts = [
+        { title: "🔥 Checkmate Challenge", online: "● 3 079 joueurs en ligne", link: "checkmate.html", popular: true },
+        { title: "1 contre 3 (4 joueurs)", online: "● 1 568 joueurs en ligne", link: "uncontretrois.html", popular: true },
+        { title: "👻 Ghost Master", online: "● 986 joueurs en ligne", link: "ghost.html" },
+        { title: "🌳 Chess Forest", online: "● 1 245 joueurs en ligne", link: "ChessForest.html" },
+        { title: "🕵️ Detective", online: "● 2 031 joueurs en ligne", link: "detective.html" }
+    ];
+
+    const container = document.getElementById("gameMenu");
+
+    // Vide tout contenu texte brut
+    container.innerHTML = "";
+
+    gameTexts.forEach(game => {
+        // Crée la carte
+        const card = document.createElement("div");
+        card.className = "game-card";
+
+        if (game.popular) {
+            const badge = document.createElement("div");
+            badge.className = "badge";
+            badge.textContent = "Populaire";
+            card.appendChild(badge);
+        }
+
+        const title = document.createElement("div");
+        title.className = "game-title";
+        title.textContent = game.title;
+        card.appendChild(title);
+
+        const online = document.createElement("div");
+        online.className = "online";
+        online.textContent = game.online;
+        card.appendChild(online);
+
+        const btn = document.createElement("button");
+        btn.className = "play-btn";
+        btn.textContent = "Jouer";
+        btn.onclick = () => { window.location.href = game.link; };
+        card.appendChild(btn);
+
+        container.appendChild(card);
+    });
+
+    // Affiche le menu maintenant que les cartes sont créées
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.gap = "25px";
+});
+</script>
 
 <footer>© 2026 C-B-R</footer>
 
