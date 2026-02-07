@@ -50,9 +50,7 @@ header {
     transition: 0.3s;
 }
 
-.menu:hover {
-    background: #555;
-}
+.menu:hover { background: #555; }
 
 /* ====== PROFILE ICON ====== */
 .profile {
@@ -68,219 +66,127 @@ header {
     transition: 0.3s;
 }
 
-.profile:hover {
-    background: #555;
-}
+.profile:hover { background: #555; }
 
-/* ====== PROFILE POPUP ====== */
-.profile-popup {
-    position: absolute;
-    top: 65px;
-    right: 20px;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 15px;
-    display: none;
-    width: 200px;
-    z-index: 9999;
-}
-
-.profile-popup h3 {
-    margin: 0 0 10px 0;
-    color: #f0c420;
-}
-
-/* ====== GAME CARD ====== */
-.container {
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    max-width: 520px;
-    margin: auto;
-}
-
-.game-card {
-    background: #181818;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 25px;
-    width: 420px;          
-    margin: 0 auto;     
-    position: relative;
-    transition: 0.3s;
-    z-index: 1;
-}
-
-.game-card:hover {
-    border-color: #444;
-    transform: scale(1.02);
-}
-
-/* ====== BADGE POPULAIRE ====== */
-.badge {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    background: #ff9800;
-    color: black;
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-    animation: glow 2s infinite;
-}
-
-@keyframes glow {
-    0% { box-shadow: 0 0 5px #ff9800; }
-    50% { box-shadow: 0 0 18px #ff9800; }
-    100% { box-shadow: 0 0 5px #ff9800; }
-}
-
-.game-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.online {
-    color: #4caf50;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-/* ====== BUTTON ====== */
-.play-btn {
-    background: #2e7d32;
-    border: none;
-    padding: 12px 20px;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
+/* ====== CBR ICON ====== */
+#cbrIcon {
+    width: 150px;
+    margin: 80px auto 20px auto;
+    display: block;
     cursor: pointer;
-    transition: 0.3s;
+    animation: popIn 1s ease forwards;
 }
 
-.play-btn:hover {
-    background: #43a047;
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-/* ====== FOOTER ====== */
-footer {
-    text-align: center;
-    margin-top: 40px;
-    color: #666;
-    font-size: 14px;
+/* ====== WELCOME + LOADER ====== */
+#welcome { display: none; font-size: 24px; text-align: center; margin-top: 20px; }
+#loader {
+    display: none;
+    margin: 30px auto;
+    width: 50px; height: 50px;
+    border: 5px solid #444;
+    border-top: 5px solid #f0c420;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* ====== MENU DES JEUX ====== */
+#menu { display: none; text-align: center; margin-top: 40px; }
+.menu-btn, .logout-btn {
+    display: block;
+    margin: 15px auto;
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 220px;
+}
+.menu-btn { background: #f0c420; color: #111; }
+.logout-btn { background: #ff4444; color: #fff; }
 </style>
 </head>
-
 <body>
 
 <header>
     <div class="left-header">
-        <div class="menu">⋮</div>
-        <div class="logo">Chess Battle Run</div>
+        <div class="logo">CBR</div>
     </div>
-    <div class="profile" onclick="toggleProfile()">A</div>
+    <div class="right-header">
+        <div class="menu">⋮</div>
+        <div class="profile">P</div>
+    </div>
 </header>
 
-<!-- PROFILE POPUP -->
-<div class="profile-popup" id="profilePopup">
-    <h3>Profil</h3>
-    <p>Niveau Checkmate : <b>1200</b></p>
-    <p>Victoires : 12</p>
-    <p>Défaites : 4</p>
+<!-- CBR Icon pour connexion -->
+<img id="cbrIcon" src="img/icon.png" alt="CBR Icon">
+
+<!-- Bienvenue + Loader -->
+<div id="welcome"></div>
+<div id="loader"></div>
+
+<!-- Menu des jeux -->
+<div id="menu">
+    <h2>Menu des jeux</h2>
+    <button class="menu-btn">Checkmate Challenge</button>
+    <button class="menu-btn">Chess Forest</button>
+    <button class="menu-btn">Gladiator</button>
+    <button class="logout-btn" id="logout">Se déconnecter</button>
 </div>
-
-<div class="container">
-
-    <!-- CHECKMATE CHALLENGE -->
-    <div class="game-card">
-        <div class="badge">Populaire</div>
-        <div class="game-title">🔥 Checkmate Challenge</div>
-        <div class="online">● 3 079 joueurs en ligne</div>
-        <button class="play-btn" onclick="startGame()">Jouer</button>
-    </div>
-
-    <!-- 4 PLAYER GAME -->
-    <div class="game-card">
-        <div class="badge">Populaire</div>
-        <div class="game-title">1 contre 3 (4 joueurs)</div>
-        <div class="online">● 1 568 joueurs en ligne</div>
-        <button class="play-btn" onclick="startArena()">Jouer</button>
-    </div>
-
-    <!-- GHOST MASTER -->
-    <div class="game-card">
-        <div class="game-title">👻 Ghost Master</div>
-        <div class="online">● 986 joueurs en ligne</div>
-        <button class="play-btn" onclick="startGhost()">Jouer</button>
-    </div>
-
-    <!-- CHESS FOREST -->
-    <div class="game-card">
-        <div class="game-title">🌳 Chess Forest</div>
-        <div class="online">● 1 245 joueurs en ligne</div>
-        <button class="play-btn" onclick="startForest()">Jouer</button>
-    </div>
-
-    <!-- DETECTIVE -->
-    <div class="game-card">
-        <div class="game-title">🕵️ Detective</div>
-        <div class="online">● 2 031 joueurs en ligne</div>
-        <button class="play-btn" onclick="startDetective()">Jouer</button>
-    </div>
-
-</div>
-
-<footer>
-© 2026 C-B-R
-</footer>
 
 <script>
-function toggleProfile(){
-    let popup = document.getElementById("profilePopup");
-    popup.style.display = popup.style.display === "block" ? "none" : "block";
+const clientId = "YOUR_CLIENT_ID"; // Mets ton client_id Lichess ici
+const redirectUri = window.location.origin + window.location.pathname;
+
+const cbrIcon = document.getElementById("cbrIcon");
+const welcomeDiv = document.getElementById("welcome");
+const loader = document.getElementById("loader");
+const menu = document.getElementById("menu");
+const logoutBtn = document.getElementById("logout");
+
+// Étape 1 : click sur icône pour login
+cbrIcon.addEventListener("click", () => {
+    window.location.href = `https://lichess.org/oauth?response_type=token&client_id=${clientId}&scope=board:play&redirect_uri=${redirectUri}`;
+});
+
+// Étape 2 : récupérer le token si redirect
+function getAccessTokenFromUrl() {
+    const hash = window.location.hash;
+    if (hash) {
+        const params = new URLSearchParams(hash.slice(1));
+        return params.get("access_token");
+    }
+    return null;
 }
 
-function startGame(){ window.location.href = "checkmate.html"; }
-function startArena(){ window.location.href = "uncontretrois.html"; }
-function startGhost(){ window.location.href = "ghost.html"; }
-function startForest(){ window.location.href = "ChessForest.html"; }
-function startDetective(){ window.location.href = "detective.html"; }
-</script>
-<!-- LIVE CHESSBOARD -->
-<div id="liveChessboard" style="width: 400px; margin: 40px auto;"></div>
+const token = getAccessTokenFromUrl();
 
-<!-- Scripts pour échiquier live -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
-<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+if(token) {
+    // Masquer l'icône
+    cbrIcon.style.display = "none";
 
-<script>
-  // Initialise le jeu
-  const liveGame = new Chess();
+    // Afficher bienvenue
+    welcomeDiv.innerText = "Bienvenue, joueur Lichess !";
+    welcomeDiv.style.display = "block";
 
-  // Initialise l'échiquier
-  const liveBoard = Chessboard('liveChessboard', {
-    position: 'start',   // position initiale
-    draggable: false,    // pas de déplacement pour le live
-    showNotation: true   // montre les lettres/nombres comme Lichess
-  });
+    // Afficher loader et redirection après 2 sec
+    loader.style.display = "block";
 
-  // Exemple : mettre à jour la position avec un FEN
-  function updateLiveBoard(fen) {
-    liveGame.load(fen);
-    liveBoard.position(fen);
-  }
+    setTimeout(() => {
+        loader.style.display = "none";
+        menu.style.display = "block";
+    }, 2000);
+}
 
-  // Exemple de test : position après quelques coups
-  setTimeout(() => {
-    updateLiveBoard('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2');
-  }, 2000);
-
-  // 🔹 Plus tard : tu pourras récupérer les positions des joueurs depuis Firebase et faire updateLiveBoard(fen)
+// Déconnexion
+logoutBtn.addEventListener("click", () => {
+    window.location.href = redirectUri;
+});
 </script>
 </body>
 </html>
