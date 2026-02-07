@@ -99,40 +99,34 @@ header {
 
 /* ===== MAIN CONTAINER ===== */
 .main-container {
-<!-- SPINNER + BOUTON OAUTH -->
-<div class="main-container">
-    <div class="spinner" id="spinner"></div>
-    <button id="lichessBtn">Se connecter avec Lichess</button>
-</div>
-
-<script>
-// Affiche le bouton OAuth après 2 secondes
-const spinner = document.getElementById('spinner');
-const lichessBtn = document.getElementById('lichessBtn');
-
-lichessBtn.style.display = 'none';
-
-setTimeout(() => {
-    spinner.style.display = 'none';
-    lichessBtn.style.display = 'block';
-}, 2000);
-
-// Redirection vers OAuth Lichess
-lichessBtn.onclick = () => {
-    // Remplace YOUR_CLIENT_ID par ton client_id réel
-    window.location.href = "https://lichess.org/oauth?response_type=token&client_id=YOUR_CLIENT_ID&scope=board:play&redirect_uri=https://alata-sys.github.io/Chess-Arena-X/index.html";
-};
-
-// Vérifie si le token est dans l'URL après OAuth
-function showGameMenu() {
-    document.querySelector('.main-container').style.display = 'none';
-    document.getElementById('gameMenu').style.display = 'flex';
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-if (window.location.hash.includes('access_token')) {
-    showGameMenu();
+/* ===== SPINNER ===== */
+.spinner {
+    border: 6px solid #222;
+    border-top: 6px solid #f0c420;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
+    margin-bottom: 20px;
 }
-</script>
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #f0c420; }
+    50% { box-shadow: 0 0 15px #f0c420; }
+    100% { box-shadow: 0 0 5px #f0c420; }
+}
 
 /* ===== LICHESS BUTTON ===== */
 #lichessBtn {
@@ -157,7 +151,7 @@ if (window.location.hash.includes('access_token')) {
 /* ===== MENU DES JEUX ===== */
 .container {
     padding: 25px;
-    display: none; /* caché au départ, affiché après OAuth */
+    display: none;
     flex-direction: column;
     gap: 25px;
     max-width: 520px;
@@ -242,15 +236,49 @@ footer {
     <button onclick="logout()">Déconnexion</button>
 </div>
 
+<!-- SPINNER + BOUTON OAUTH -->
 <div class="main-container">
     <div class="spinner" id="spinner"></div>
     <button id="lichessBtn">Se connecter avec Lichess</button>
 </div>
 
+<!-- CONTAINER MENU -->
+<div class="container" id="gameMenu"></div>
+
 <script>
-// Transforme le menu texte en cartes interactives
-document.addEventListener("DOMContentLoaded", () => {
-    const gameTexts = [
+// Gestion profil
+function toggleProfile(){
+    const popup = document.getElementById("profilePopup");
+    popup.style.display = popup.style.display === "block" ? "none" : "block";
+}
+
+function logout(){
+    alert("Déconnecté !");
+    location.reload();
+}
+
+// Gestion spinner + bouton OAuth
+const spinner = document.getElementById('spinner');
+const lichessBtn = document.getElementById('lichessBtn');
+const gameMenu = document.getElementById('gameMenu');
+
+lichessBtn.style.display = 'none';
+
+setTimeout(() => {
+    spinner.style.display = 'none';
+    lichessBtn.style.display = 'block';
+}, 2000);
+
+lichessBtn.onclick = () => {
+    window.location.href = "https://lichess.org/oauth?response_type=token&client_id=YOUR_CLIENT_ID&scope=board:play&redirect_uri=https://alata-sys.github.io/Chess-Arena-X/index.html";
+}
+
+// Crée et affiche le menu après OAuth
+function showGameMenu() {
+    document.querySelector('.main-container').style.display = 'none';
+    gameMenu.innerHTML = ''; // vide container
+
+    const games = [
         { title: "🔥 Checkmate Challenge", online: "● 3 079 joueurs en ligne", link: "checkmate.html", popular: true },
         { title: "1 contre 3 (4 joueurs)", online: "● 1 568 joueurs en ligne", link: "uncontretrois.html", popular: true },
         { title: "👻 Ghost Master", online: "● 986 joueurs en ligne", link: "ghost.html" },
@@ -258,17 +286,11 @@ document.addEventListener("DOMContentLoaded", () => {
         { title: "🕵️ Detective", online: "● 2 031 joueurs en ligne", link: "detective.html" }
     ];
 
-    const container = document.getElementById("gameMenu");
-
-    // Vide tout contenu texte brut
-    container.innerHTML = "";
-
-    gameTexts.forEach(game => {
-        // Crée la carte
+    games.forEach(game => {
         const card = document.createElement("div");
         card.className = "game-card";
 
-        if (game.popular) {
+        if(game.popular){
             const badge = document.createElement("div");
             badge.className = "badge";
             badge.textContent = "Populaire";
@@ -291,61 +313,20 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.onclick = () => { window.location.href = game.link; };
         card.appendChild(btn);
 
-        container.appendChild(card);
+        gameMenu.appendChild(card);
     });
 
-    // Affiche le menu maintenant que les cartes sont créées
-    container.style.display = "flex";
-    container.style.flexDirection = "column";
-    container.style.gap = "25px";
-});
-</script>
-
-<footer>© 2026 C-B-R</footer>
-
-<script>
-// Toggle profil
-function toggleProfile(){
-    const popup = document.getElementById("profilePopup");
-    popup.style.display = popup.style.display === "block" ? "none" : "block";
+    gameMenu.style.display = 'flex';
+    gameMenu.style.flexDirection = 'column';
+    gameMenu.style.gap = '25px';
 }
 
-function logout(){
-    alert("Déconnecté !");
-    location.reload();
-}
-
-// Redirection jeux
-function startGame(){ window.location.href = "checkmate.html"; }
-function startArena(){ window.location.href = "uncontretrois.html"; }
-function startGhost(){ window.location.href = "ghost.html"; }
-function startForest(){ window.location.href = "ChessForest.html"; }
-function startDetective(){ window.location.href = "detective.html"; }
-
-// Gestion spinner + bouton OAuth
-const lichessBtn = document.getElementById('lichessBtn');
-lichessBtn.onclick = () => {
-    window.location.href = "https://lichess.org/oauth?response_type=token&client_id=YOUR_CLIENT_ID&scope=board:play&redirect_uri=https://alata-sys.github.io/Chess-Arena-X/index.html";
-}
-
-// Affiche le bouton après 2s, simule “connexion”
-setTimeout(() => {
-    document.getElementById('spinner').style.display = 'none';
-    lichessBtn.style.display = 'block';
-}, 2000);
-
-// Simuler l’état connecté après OAuth pour montrer le menu
-// (dans la vraie app, tu parserais le token de Lichess)
-function showGameMenu() {
-    document.querySelector('.main-container').style.display = 'none';
-    document.getElementById('gameMenu').style.display = 'flex';
-}
-
-// Exemple : si token présent dans URL, on montre le menu
-if(window.location.hash.includes('access_token')) {
+// Affiche le menu si token OAuth présent dans l’URL
+if(window.location.hash.includes('access_token')){
     showGameMenu();
 }
 </script>
 
+<footer>© 2026 C-B-R</footer>
 </body>
 </html>
