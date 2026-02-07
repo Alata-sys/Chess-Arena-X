@@ -6,99 +6,28 @@
 <title>Chess Battle Run</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f0f0f;
-    color: white;
-}
+body { margin:0; font-family:Arial,sans-serif; background:#0f0f0f; color:white; }
+header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background:#111; border-bottom:1px solid #222; }
+.left-header { display:flex; align-items:center; gap:12px; }
+.logo { font-size:20px; font-weight:bold; color:#f0c420; }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background: #111;
-    border-bottom: 1px solid #222;
-}
+.profile { width:38px; height:38px; border-radius:50%; background:#333; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; position:relative; }
+.profile:hover { background:#555; }
+.profile-menu { display:none; position:absolute; top:45px; right:0; background:#222; border:1px solid #444; border-radius:5px; padding:10px; min-width:120px; z-index:10; }
+.profile-menu button { width:100%; padding:8px; border:none; background:#ff4444; color:#fff; border-radius:3px; cursor:pointer; }
 
-.left-header { display: flex; align-items: center; gap: 12px; }
-.logo { font-size: 20px; font-weight: bold; color: #f0c420; }
+#welcome { display:none; font-size:24px; text-align:center; margin-top:20px; }
+#loader { display:none; margin:30px auto; width:50px; height:50px; border:5px solid #444; border-top:5px solid #f0c420; border-radius:50%; animation:spin 1s linear infinite; }
+@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
 
-.profile {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    position: relative;
-}
-
-.profile:hover { background: #555; }
-
-/* Mini menu profile */
-.profile-menu {
-    display: none;
-    position: absolute;
-    top: 45px;
-    right: 0;
-    background: #222;
-    border: 1px solid #444;
-    border-radius: 5px;
-    padding: 10px;
-    min-width: 120px;
-    z-index: 10;
-}
-
-.profile-menu button {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    background: #ff4444;
-    color: #fff;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-/* Bienvenue + Loader */
-#welcome { display: none; font-size: 24px; text-align: center; margin-top: 20px; }
-#loader {
-    display: none;
-    margin: 30px auto;
-    width: 50px; height: 50px;
-    border: 5px solid #444;
-    border-top: 5px solid #f0c420;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-/* Menu des jeux */
-#menu { display: none; text-align: center; margin-top: 40px; }
-.menu-btn {
-    display: block;
-    margin: 15px auto;
-    padding: 12px 25px;
-    font-size: 18px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 220px;
-    background: #f0c420;
-    color: #111;
-}
+#menu { display:none; text-align:center; margin-top:40px; }
+.menu-btn { display:block; margin:15px auto; padding:12px 25px; font-size:18px; border:none; border-radius:5px; cursor:pointer; width:220px; background:#f0c420; color:#111; }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="left-header">
-        <div class="logo">CBR</div>
-    </div>
+    <div class="left-header"><div class="logo">CBR</div></div>
     <div class="right-header">
         <div class="profile" id="profileIcon">P
             <div class="profile-menu" id="profileMenu">
@@ -108,11 +37,9 @@ header {
     </div>
 </header>
 
-<!-- Bienvenue + Loader -->
 <div id="welcome"></div>
 <div id="loader"></div>
 
-<!-- Menu des jeux -->
 <div id="menu">
     <h2>Menu des jeux</h2>
     <button class="menu-btn">Checkmate Challenge</button>
@@ -121,22 +48,22 @@ header {
 </div>
 
 <script>
-// === CONFIG LICHESS ===
 const clientId = "YOUR_CLIENT_ID";
 const redirectUri = window.location.origin + window.location.pathname;
 
-// === PROFIL MENU ===
+// ===== PROFIL MENU =====
 const profileIcon = document.getElementById("profileIcon");
 const profileMenu = document.getElementById("profileMenu");
 profileIcon.addEventListener("click", () => {
     profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
 });
 document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("lichess_token"); // vider le token
     window.location.href = redirectUri;
 });
 
-// === RECUP TOKEN ===
-function getAccessTokenFromUrl() {
+// ===== RECUP TOKEN =====
+function getTokenFromUrl() {
     const hash = window.location.hash;
     if(hash){
         const params = new URLSearchParams(hash.slice(1));
@@ -145,13 +72,19 @@ function getAccessTokenFromUrl() {
     return null;
 }
 
-const token = getAccessTokenFromUrl();
+let token = localStorage.getItem("lichess_token") || getTokenFromUrl();
+if(getTokenFromUrl()) {
+    // garder le token en local pour ne pas le perdre au reload
+    localStorage.setItem("lichess_token", token);
+    // enlever le hash pour URL propre
+    history.replaceState(null, null, redirectUri);
+}
 
-// === REDIRECTION AUTOMATIQUE SI NON CONNECTÉ ===
+// ===== REDIRECTION AUTOMATIQUE SI NON CONNECTÉ =====
 if(!token){
     window.location.href = `https://lichess.org/oauth?response_type=token&client_id=${clientId}&scope=board:play&redirect_uri=${redirectUri}`;
 } else {
-    // Masquer loader, afficher bienvenue et menu
+    // afficher bienvenue + loader
     const welcomeDiv = document.getElementById("welcome");
     const loader = document.getElementById("loader");
     const menu = document.getElementById("menu");
