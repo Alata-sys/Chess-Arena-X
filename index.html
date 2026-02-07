@@ -83,7 +83,7 @@ header {
     padding: 15px;
     display: none;
     width: 200px;
-    z-index: 9999; /* FIX IMPORTANT */
+    z-index: 9999;
 }
 
 .profile-popup h3 {
@@ -94,6 +94,11 @@ header {
 /* ====== GAME CARD ====== */
 .container {
     padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-width: 520px;
+    margin: auto;
 }
 
 .game-card {
@@ -101,27 +106,17 @@ header {
     border: 1px solid #2a2a2a;
     border-radius: 12px;
     padding: 25px;
-    max-width: 500px;
-    margin: auto;
+    width: 420px;          
+    margin: 0 auto;     
     position: relative;
-    z-index: 1; /* pour que popup passe devant */
     transition: 0.3s;
+    z-index: 1;
 }
 
 .game-card:hover {
     border-color: #444;
     transform: scale(1.02);
 }
-    .game-card {
-    background: #181818;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 25px;
-    width: 420px;          /* largeur fixe */
-    margin: 20px auto;     /* espace entre cartes */
-    position: relative;
-    transition: 0.3s;
-    }
 
 /* ====== BADGE POPULAIRE ====== */
 .badge {
@@ -177,14 +172,6 @@ footer {
     color: #666;
     font-size: 14px;
 }
-    .container {
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;       /* espace identique */
-    max-width: 520px;
-    margin: auto;
-    }
 </style>
 </head>
 
@@ -208,51 +195,45 @@ footer {
 
 <div class="container">
 
-    <!-- CHECKMATE CHALLENGE CARD -->
+    <!-- CHECKMATE CHALLENGE -->
     <div class="game-card">
         <div class="badge">Populaire</div>
-        <div class="game-title"> 🔥 Checkmate Challenge</div>
+        <div class="game-title">🔥 Checkmate Challenge</div>
         <div class="online">● 3 079 joueurs en ligne</div>
         <button class="play-btn" onclick="startGame()">Jouer</button>
     </div>
-    <!-- 4 PLAYER CARD -->
-<div class="game-card">
-    <div class="badge">Populaire</div>
-    <div class="game-title">1 contre 3(4joueurs)</div>
-    <div class="online">● 1 568 joueurs en ligne</div>
-    <button class="play-btn" onclick="startArena()">Jouer</button>
-</div>
-    <!-- GHOST MASTER CARD -->
-<div class="game-card">
-    <div class="game-title">👻 Ghost Master</div>
-    <div class="online">● 986 joueurs en ligne</div>
-    <button class="play-btn" onclick="startGhost()">Jouer</button>
-</div>
 
-</div>
-    <!-- CHESS FOREST CARD -->
-<div class="game-card">
-    <div class="game-title">🌳 Chess Forest</div>
-    <div class="online">● 1 245 joueurs en ligne</div>
-    <button class="play-btn" onclick="startForest()">Jouer</button>
-</div>
-<div class="container">
-
+    <!-- 4 PLAYER GAME -->
     <div class="game-card">
-        ...
+        <div class="badge">Populaire</div>
+        <div class="game-title">1 contre 3 (4 joueurs)</div>
+        <div class="online">● 1 568 joueurs en ligne</div>
+        <button class="play-btn" onclick="startArena()">Jouer</button>
     </div>
 
+    <!-- GHOST MASTER -->
     <div class="game-card">
-        ...
+        <div class="game-title">👻 Ghost Master</div>
+        <div class="online">● 986 joueurs en ligne</div>
+        <button class="play-btn" onclick="startGhost()">Jouer</button>
+    </div>
+
+    <!-- CHESS FOREST -->
+    <div class="game-card">
+        <div class="game-title">🌳 Chess Forest</div>
+        <div class="online">● 1 245 joueurs en ligne</div>
+        <button class="play-btn" onclick="startForest()">Jouer</button>
+    </div>
+
+    <!-- DETECTIVE -->
+    <div class="game-card">
+        <div class="game-title">🕵️ Detective</div>
+        <div class="online">● 2 031 joueurs en ligne</div>
+        <button class="play-btn" onclick="startDetective()">Jouer</button>
     </div>
 
 </div>
-    <!-- DETECTIVE CARD -->
-<div class="game-card">
-    <div class="game-title">🕵️ Detective</div>
-    <div class="online">● 2 031 joueurs en ligne</div>
-    <button class="play-btn" onclick="startDetective()">Jouer</button>
-</div>
+
 <footer>
 © 2026 C-B-R
 </footer>
@@ -263,21 +244,11 @@ function toggleProfile(){
     popup.style.display = popup.style.display === "block" ? "none" : "block";
 }
 
-function startGame(){
-    window.location.href = "checkmate.html";
-}
-    function startForest(){
-    window.location.href = "ChessForest.html";
-    }
-    function startGhost(){
-    window.location.href = "ghost.html";
-    }
-    function startDetective(){
-    window.location.href = "detective.html";
-    }
-    function startArena(){
-    window.location.href = "uncontretrois.html";
-    }
+function startGame(){ window.location.href = "checkmate.html"; }
+function startArena(){ window.location.href = "uncontretrois.html"; }
+function startGhost(){ window.location.href = "ghost.html"; }
+function startForest(){ window.location.href = "ChessForest.html"; }
+function startDetective(){ window.location.href = "detective.html"; }
 </script>
 
 </body>
